@@ -27,17 +27,7 @@ namespace EC2Info
         {
             InitializeComponent();
 
-
-            Amazon.SecurityToken.Model.AssumeRoleRequest assumeRequest = new Amazon.SecurityToken.Model.AssumeRoleRequest();
-            assumeRequest.RoleArn = "arn:aws:iam::640467343547:role/CA_KCOM_ADM"; //Target Role (atocrarsdev)   
-            assumeRequest.RoleArn = "arn:aws:iam::690933247543:role/CA_KCOM_ADM"; //EasyJet Non Prod
-            assumeRequest.RoleSessionName = "sgAudit";
-            assumeRequest.SerialNumber = "arn:aws:iam::049793823615:mfa/rbowden.kcom.adm"; //MFA arn
-            
-            assumeRequest.TokenCode = "838745"; //MFA code
-
-            Amazon.SecurityToken.AmazonSecurityTokenServiceClient secClient = new Amazon.SecurityToken.AmazonSecurityTokenServiceClient();
-            Amazon.SecurityToken.Model.AssumeRoleResponse assumeResponse = secClient.AssumeRole(assumeRequest);
+                      
 
             PopulateRegionDropDown();
             PopulateProfileDropDown();

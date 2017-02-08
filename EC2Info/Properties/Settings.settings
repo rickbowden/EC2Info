@@ -1,0 +1,28 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EC2Info.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AWSRegion" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;eu-west-1&lt;/string&gt;
+  &lt;string&gt;eu-central-1&lt;/string&gt;
+  &lt;string&gt;us-east-1&lt;/string&gt;
+  &lt;string&gt;us-west-1&lt;/string&gt;
+  &lt;string&gt;us-west-2&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="AWSDefaultRegion" Type="System.String" Scope="User">
+      <Value Profile="(Default)">eu-west-1</Value>
+    </Setting>
+    <Setting Name="Roles" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;atocrarsdev|arn:aws:iam::640467343547:role/CA_KCOM_ADM|arn:aws:iam::049793823615:mfa/rbowden.kcom.adm&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="MFADevice" Type="System.String" Scope="User">
+      <Value Profile="(Default)">arn:aws:iam::049793823615:mfa/rbowden.kcom.adm</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

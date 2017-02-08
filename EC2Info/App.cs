@@ -28,7 +28,6 @@ namespace EC2Info
             InitializeComponent();
                              
      
-
             PopulateRegionDropDown();
             PopulateProfileDropDown();
             PopulateRoleDropDown();

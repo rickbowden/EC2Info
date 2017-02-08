@@ -26,8 +26,7 @@ namespace EC2Info
         public App()
         {
             InitializeComponent();
-
-                      
+                                  
 
             PopulateRegionDropDown();
             PopulateProfileDropDown();

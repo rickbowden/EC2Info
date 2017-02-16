@@ -23,7 +23,7 @@ namespace EC2Info.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -33,15 +33,20 @@ namespace EC2Info.Properties {
   <string>us-west-1</string>
   <string>us-west-2</string>
 </ArrayOfString>")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
         public global::System.Collections.Specialized.StringCollection AWSRegion {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["AWSRegion"]));
+            }
+            set {
+                this["AWSRegion"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("eu-west-1")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
         public string AWSDefaultRegion {
             get {
                 return ((string)(this["AWSDefaultRegion"]));
@@ -53,10 +58,27 @@ namespace EC2Info.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>default|arn:aws:iam::049793823615:mfa/rbowden.kcom.adm</string>\r\n</ArrayOf" +
+            "String>")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public global::System.Collections.Specialized.StringCollection MFADevices {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MFADevices"]));
+            }
+            set {
+                this["MFADevices"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>atocrarsdev|arn:aws:iam::640467343547:role/CA_KCOM_ADM|arn:aws:iam::049793823615:mfa/rbowden.kcom.adm</string>
+  <string>CA_KCOM_ADM @ easyJet Non-Prod|arn:aws:iam::640467343547:role/CA_KCOM_ADM</string>
 </ArrayOfString>")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
         public global::System.Collections.Specialized.StringCollection Roles {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["Roles"]));
@@ -68,13 +90,15 @@ namespace EC2Info.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("arn:aws:iam::049793823615:mfa/rbowden.kcom.adm")]
-        public string MFADevice {
+        [global::System.Configuration.DefaultSettingValueAttribute("Name,InstanceId,PrivateIpAddress,PublicIpAddress,VpcId,SubnetId,KeyName,SecurityG" +
+            "roups")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public string EC2ItemSet1 {
             get {
-                return ((string)(this["MFADevice"]));
+                return ((string)(this["EC2ItemSet1"]));
             }
             set {
-                this["MFADevice"] = value;
+                this["EC2ItemSet1"] = value;
             }
         }
     }

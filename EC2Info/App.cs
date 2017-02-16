@@ -20,23 +20,125 @@ namespace EC2Info
     {
         static AWSCredentials creds;
 
-        static Dictionary<string, string> roles;
+        //static Dictionary<string, string> roles;
+        static Dictionary<string, string> MfaDevices = new Dictionary<string,string>();
         public static string mfacode = "";
+        static DateTime mfaExpires;
                
         public App()
         {
             InitializeComponent();
-                            
- 
-     
-            PopulateRegionDropDown();
-            PopulateProfileDropDown();
-            PopulateRoleDropDown();
 
-            //Set default region
-            AWSConfigs.AWSRegion = Properties.Settings.Default.AWSDefaultRegion;
+            try
+            {
+                PopulateMfaDevicesDic();
+                PopulateRegionDropDown();
+                PopulateProfileDropDown();
+                PopulateRoleDropDown();
+
+                //Set default region
+                AWSConfigs.AWSRegion = Properties.Settings.Default.AWSDefaultRegion;
+
+                dataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            }
+            catch (Exception ex)
+            {
+                DisplayError(ex.Message);
+            }
+
         }
 
+
+
+        //-------------------------------------------------------------------------
+        // Control Events (Start)
+        //-------------------------------------------------------------------------
+
+        private void Submit_BTN_Click(object sender, EventArgs e)
+        {
+            if (Profile_CBB.Text == "select a profile") { return; }
+            try
+            {
+                //Set region
+                AWSConfigs.AWSRegion = AWSRegion_CBB.Text;
+
+                //Set Creds
+                SetCreds();
+
+                backgroundWorker1.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                DisplayError(ex.Message);
+            }
+
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Form options = new Options();
+                options.Show();
+            }
+            catch (Exception ex)
+            {
+                DisplayError(ex.Message);
+            }
+        }
+
+        private void ProcessSG_BTN_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ProcessSecurityGroups();
+            }
+            catch (Exception ex)
+            {
+                DisplayError(ex.Message);
+            }
+        }
+
+        private void CopyStyle_CB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CopyStyle_CB.Checked)
+            {
+                dataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            }
+            else
+            {
+                dataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            }
+        }
+
+        //-------------------------------------------------------------------------
+        // Control Events (End)
+        //-------------------------------------------------------------------------
+
+
+        void DisplayError(string message)
+        {
+            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); 
+            
+        }
+        
+
+        void PopulateMfaDevicesDic()
+        {
+            if (MfaDevices != null)
+            {
+                MfaDevices.Clear();
+            }
+            foreach (string item in Properties.Settings.Default.MFADevices)
+            {
+                string[] items = item.Split('|');
+                if (items.Length == 2)
+                { 
+                    MfaDevices.Add(items[0], items[1]);
+                }
+            }
+        }
+        
         void PopulateRegionDropDown()
         {
             AWSRegion_CBB.Items.Clear();
@@ -68,18 +170,12 @@ namespace EC2Info
               string[]a=role.Split('|');
               ComboboxItem item = new ComboboxItem();
               item.Name = a[0];
-              item.Role = a[1];
-              item.MFA = a[2];
+              item.Role = a[1];              
               AssumeRole_CBB.Items.Add(item);
             }
-            
-            //XDocument xdoc = XDocument.Load("roles.xml");            
-            //roles = xdoc.Descendants("roles").Elements().ToDictionary(n => (n.Attribute("name").Value), n => n.Value);
-            //foreach (var item in roles)
-            //{
-            //    AssumeRole_CBB.Items.Add(item.Key);
-            //}
+                        
         }
+
 
         DescribeInstancesResponse GetInstances(List<string> instanceIds)
         {
@@ -88,47 +184,80 @@ namespace EC2Info
             using (AmazonEC2Client EC2client = new AmazonEC2Client(creds))
             {
                 DescribeInstancesRequest rq = new DescribeInstancesRequest();
+                //List<Filter> filterList = new List<Filter>();
+                //Filter filter = new Filter();
+                //filter.Name = "instance-id";
+                //filter.Values = instanceIds;
+                //filterList.Add(filter);
+                //rq.Filters = filterList;
                 rq.InstanceIds = instanceIds;
-                result = EC2client.DescribeInstances(rq);
-
-                
+                if (instanceIds.Count == 0)
+                {
+                    result = EC2client.DescribeInstances();
+                }
+                else
+                {
+                    result = EC2client.DescribeInstances(rq);
+                }                
             }
 
             return result;
         }
 
 
-        //void DisplayResult(Instance s)
-        //{
-        //    if (s == null) { return; }
+        static List<string> BuildSearchString(string inputString)
+        {
+            List<string> result = new List<string>();
 
-        //    StringBuilder sb = new StringBuilder();
-        //    sb.AppendLine("InstanceId: " + s.InstanceId);
-        //    var a = s.Tags.Find(n => n != null && n.Value == "Name");
-        //    if (a != null) { sb.AppendLine("Name: " + a.Value); }
-        //    //Result_TB.Text = sb.ToString();
-        //}
+            if (inputString.Length > 0)
+            {
+                string[] a = inputString.Split(',');
+                result = a.ToList();
+            }
+
+            return result;
+        }
+       
 
         private void SetCreds()
         {
-            if (creds == null)
+            if (creds == null || DateTime.Now >= mfaExpires || AWSConfigs.AWSProfileName != Profile_CBB.Text)
             {
-                if (Profile_RB.Checked)
+                AWSConfigs.AWSProfileName = Profile_CBB.Text;
+                
+                if (AssumeRole_CBB.Text == "none")
                 {
                     creds = new StoredProfileAWSCredentials(Profile_CBB.Text);
+                    
                 }
-                else if (Role_RB.Checked)
+                else                
                 {
                     ComboboxItem o = (ComboboxItem)AssumeRole_CBB.SelectedItem;
+
+                    
+                    //var x = MfaDevices.First(n => n == null && String.Compare(n.Key, Profile_CBB.Text, true));
                     
                     
+                                        
                     Amazon.SecurityToken.Model.AssumeRoleRequest assumeRequest = new Amazon.SecurityToken.Model.AssumeRoleRequest();
                     assumeRequest.RoleArn = o.Role;// "arn:aws:iam::640467343547:role/CA_KCOM_ADM"; //Target Role (atocrarsdev)            
-                    assumeRequest.RoleSessionName = "ec2info";
-                    assumeRequest.SerialNumber = o.MFA;//"arn:aws:iam::049793823615:mfa/rbowden.kcom.adm"; //MFA arn
+                    assumeRequest.RoleSessionName = "ec2infoapp";
 
-                    assumeRequest.RoleArn = "arn:aws:iam::690933247543:role/CA_KCOM_ADM";
-                    assumeRequest.SerialNumber = "arn:aws:iam::049793823615:mfa/rbowden.kcom.adm";
+                    //Get mfa associated with selected profile
+                    if (MfaDevices.ContainsKey(Profile_CBB.Text))
+                    {
+                        assumeRequest.SerialNumber = MfaDevices[Profile_CBB.Text];
+                    }
+                    else
+                    {
+                        assumeRequest.SerialNumber = MfaDevices["default"];
+                    }
+
+                    //assumeRequest.SerialNumber = o.MFA;//"arn:aws:iam::049793823615:mfa/rbowden.kcom.adm"; //MFA arn
+                    
+                    //assumeRequest.RoleArn = "arn:aws:iam::690933247543:role/CA_KCOM_ADM";
+                    //assumeRequest.SerialNumber = "arn:aws:iam::049793823615:mfa/rbowden.kcom.adm";
+                    
 
                     mfa m = new mfa();
                     m.ShowDialog();
@@ -138,62 +267,148 @@ namespace EC2Info
                     Amazon.SecurityToken.AmazonSecurityTokenServiceClient secClient = new Amazon.SecurityToken.AmazonSecurityTokenServiceClient();
                     Amazon.SecurityToken.Model.AssumeRoleResponse assumeResponse = secClient.AssumeRole(assumeRequest);
 
+                    mfaExpires = assumeResponse.Credentials.Expiration;
+
                     creds = assumeResponse.Credentials;
                 }
             }
         }
 
 
-        static List<string> BuildSearchString(string inputString)
+
+
+        void DisplayResults(DescribeInstancesResponse describeInstanceResponse)
+        {                 
+            string[] colHeaders;
+            colHeaders = Properties.Settings.Default.EC2ItemSet1.Split(',');
+            if (colHeaders == null)
+            {
+                colHeaders = new string[] { "Name", "InstanceId" };
+            }
+            SetGridColumns(colHeaders);
+
+
+            if (describeInstanceResponse != null && describeInstanceResponse.Reservations.Count > 0)
+            {
+                foreach (Reservation reservations in describeInstanceResponse.Reservations)
+                {
+                    foreach (Instance instance in reservations.Instances)
+                    {                                                
+                        DataGridViewRow row = new DataGridViewRow();                        
+                        int rowNumber = dataGridView1.Rows.Add(row);
+
+                        for (int i = 0; i < colHeaders.Length; i++)
+                        {
+                            dataGridView1.Rows[rowNumber].Cells[colHeaders[i]].Value = Utils.GetEC2PropFromString(colHeaders[i], instance);
+                        }
+                    }
+                }
+            }
+
+            
+        }
+
+        void SetGridColumns(string[] colHeaders)
         {
-            List<string> result = new List<string>();
+            
+            // Clear Grid
+            dataGridView1.Rows.Clear();
+            dataGridView1.Columns.Clear();
+            //DataGridViewCellStyle cs = dataGridView1.DefaultCellStyle;
+            for (int i = 0; i < colHeaders.Length; i++)
+            {
+                dataGridView1.Columns.Add(colHeaders[i], colHeaders[i]);
+            }
+        }
 
-            string[] a = inputString.Split(',');
-            result = a.ToList();
+        void ProcessSecurityGroups()
+        {
+            List<int> newColumns = new List<int>();
+            if (dataGridView1.Columns.Contains("SecurityGroups"))
+            {                
+                int colIndex = dataGridView1.Columns.Count - 1;
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                {
+                    if (dataGridView1["SecurityGroups", i].Value != null)
+                    {
+                        string[] sgColData = dataGridView1["SecurityGroups", i].Value.ToString().Split(',');
+                        foreach (string item in sgColData)
+                        {
+                            if (!(IsAcolumn(item, dataGridView1)))
+                            {
+                                dataGridView1.Columns.Add(item, item);
+                            }
+                            dataGridView1.Rows[i].Cells[item].Value = item;
+                        }
+                    }
+                }
+                dataGridView1.Columns.Remove("SecurityGroups");
+            }
+        }
 
+        bool IsAcolumn(string input, DataGridView dgv)
+        {
+            bool result = false;
+            if (dataGridView1.Columns.Contains(input))
+            {
+                result = true;
+            }
             return result;
         }
 
-
-        private void Submit_BTN_Click(object sender, EventArgs e)
+        bool IsInRow(string input, DataGridView dgv)
         {
-            if (search_TB.Text == null | search_TB.Text.Length <= 1) { return; }
+            bool result = false;
             
-            //Set region
-            AWSConfigs.AWSRegion = AWSRegion_CBB.Text;
-
-            //Set Creds
-            SetCreds();
-
-            backgroundWorker1.RunWorkerAsync();
-            
-            
-
-            
+            return result;
         }
-
-
-
 
         //######################################################################
 
-
+        
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            backgroundWorker1.ReportProgress(1, 1);
             DescribeInstancesResponse dir = GetInstances(BuildSearchString(search_TB.Text));
-
+            e.Result = dir;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            switch ((int)e.UserState)
+            {
+                case 0:
+                    ProgressBar1.Style = ProgressBarStyle.Continuous;                    
+                    break;
+                case 1:
+                    ProgressBar1.Style = ProgressBarStyle.Marquee;
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            ProgressBar1.Style = ProgressBarStyle.Continuous;
+            ProgressBar1.Value = 0;
 
+            
+            if (e.Result != null)
+            {
+                if (e.Result is DescribeInstancesResponse)
+                {
+                    DisplayResults((DescribeInstancesResponse)e.Result);
+                }
+            }
         }
+
+        
+
+        
 
 
 
@@ -203,8 +418,7 @@ namespace EC2Info
     public class ComboboxItem
     {
         public string Name { get; set; }
-        public string Role { get; set; }
-        public string MFA { get; set; }
+        public string Role { get; set; }        
         public override string ToString()
         {
             return Name;

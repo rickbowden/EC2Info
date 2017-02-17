@@ -35,8 +35,12 @@
             this.Submit_BTN = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.AssumeRole_CBB = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Tools = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Roles = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -44,14 +48,10 @@
             this.ProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.Status_LB = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ProcessSG_BTN = new System.Windows.Forms.Button();
             this.CopyStyle_CB = new System.Windows.Forms.CheckBox();
+            this.ProcessSG_BTN = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -126,13 +126,30 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Authentication:";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(441, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(95, 17);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Assume Role:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(18, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(52, 17);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Profile:";
+            // 
             // AssumeRole_CBB
             // 
             this.AssumeRole_CBB.FormattingEnabled = true;
             this.AssumeRole_CBB.Location = new System.Drawing.Point(542, 27);
             this.AssumeRole_CBB.Name = "AssumeRole_CBB";
             this.AssumeRole_CBB.Size = new System.Drawing.Size(408, 24);
-            this.AssumeRole_CBB.Sorted = true;
             this.AssumeRole_CBB.TabIndex = 5;
             this.AssumeRole_CBB.Text = "none";
             // 
@@ -145,6 +162,21 @@
             this.menuStrip1.Size = new System.Drawing.Size(1276, 28);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
+            this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // ToolStripMenuItem_Tools
             // 
@@ -205,24 +237,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(1202, 404);
             this.dataGridView1.TabIndex = 14;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 17);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Profile:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(441, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 17);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Assume Role:";
-            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -251,31 +265,6 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Results";
             // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.optionsToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
-            this.optionsToolStripMenuItem.Text = "Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
-            // 
-            // ProcessSG_BTN
-            // 
-            this.ProcessSG_BTN.Location = new System.Drawing.Point(111, 31);
-            this.ProcessSG_BTN.Name = "ProcessSG_BTN";
-            this.ProcessSG_BTN.Size = new System.Drawing.Size(102, 25);
-            this.ProcessSG_BTN.TabIndex = 15;
-            this.ProcessSG_BTN.Text = "SG Arrange";
-            this.ProcessSG_BTN.UseVisualStyleBackColor = true;
-            this.ProcessSG_BTN.Click += new System.EventHandler(this.ProcessSG_BTN_Click);
-            // 
             // CopyStyle_CB
             // 
             this.CopyStyle_CB.AutoSize = true;
@@ -286,6 +275,16 @@
             this.CopyStyle_CB.Text = "Include Headers in Copy";
             this.CopyStyle_CB.UseVisualStyleBackColor = true;
             this.CopyStyle_CB.CheckedChanged += new System.EventHandler(this.CopyStyle_CB_CheckedChanged);
+            // 
+            // ProcessSG_BTN
+            // 
+            this.ProcessSG_BTN.Location = new System.Drawing.Point(111, 31);
+            this.ProcessSG_BTN.Name = "ProcessSG_BTN";
+            this.ProcessSG_BTN.Size = new System.Drawing.Size(102, 25);
+            this.ProcessSG_BTN.TabIndex = 15;
+            this.ProcessSG_BTN.Text = "SG Arrange";
+            this.ProcessSG_BTN.UseVisualStyleBackColor = true;
+            this.ProcessSG_BTN.Click += new System.EventHandler(this.ProcessSG_BTN_Click);
             // 
             // App
             // 

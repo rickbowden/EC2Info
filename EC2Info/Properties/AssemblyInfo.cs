@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("EC2Info")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Gets information about EC2 instances from AWS.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("FPS")]
 [assembly: AssemblyProduct("EC2Info")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

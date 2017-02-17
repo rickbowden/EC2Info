@@ -162,7 +162,7 @@ namespace EC2Info
         void PopulateRoleDropDown()
         {
             AssumeRole_CBB.Items.Clear();
-
+            AssumeRole_CBB.Sorted = true;
             foreach (string role in Properties.Settings.Default.Roles)	
             {
               string[]a=role.Split('|');
@@ -171,7 +171,11 @@ namespace EC2Info
               item.Role = a[1];              
               AssumeRole_CBB.Items.Add(item);
             }
-                        
+            AssumeRole_CBB.Sorted = false;
+            ComboboxItem item0 = new ComboboxItem();
+            item0.Name = "none";
+            item0.Role = "none";
+            AssumeRole_CBB.Items.Insert(0, item0);            
         }
 
 

@@ -18,9 +18,7 @@ namespace EC2Info
 {
     public partial class App : Form
     {
-        static AWSCredentials creds;
-
-        //static Dictionary<string, string> roles;
+        static AWSCredentials creds;               
         static Dictionary<string, string> MfaDevices = new Dictionary<string,string>();
         public static string mfacode = "";
         static DateTime mfaExpires;
@@ -234,13 +232,10 @@ namespace EC2Info
                 {
                     ComboboxItem o = (ComboboxItem)AssumeRole_CBB.SelectedItem;
 
-                    
-                    //var x = MfaDevices.First(n => n == null && String.Compare(n.Key, Profile_CBB.Text, true));
-                    
-                    
+                                         
                                         
                     Amazon.SecurityToken.Model.AssumeRoleRequest assumeRequest = new Amazon.SecurityToken.Model.AssumeRoleRequest();
-                    assumeRequest.RoleArn = o.Role;// "arn:aws:iam::640467343547:role/CA_KCOM_ADM"; //Target Role (atocrarsdev)            
+                    assumeRequest.RoleArn = o.Role;            
                     assumeRequest.RoleSessionName = "ec2infoapp";
 
                     //Get mfa associated with selected profile
@@ -253,11 +248,7 @@ namespace EC2Info
                         assumeRequest.SerialNumber = MfaDevices["default"];
                     }
 
-                    //assumeRequest.SerialNumber = o.MFA;//"arn:aws:iam::049793823615:mfa/rbowden.kcom.adm"; //MFA arn
-                    
-                    //assumeRequest.RoleArn = "arn:aws:iam::690933247543:role/CA_KCOM_ADM";
-                    //assumeRequest.SerialNumber = "arn:aws:iam::049793823615:mfa/rbowden.kcom.adm";
-                    
+                                        
 
                     mfa m = new mfa();
                     m.ShowDialog();

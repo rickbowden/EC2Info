@@ -30,5 +30,17 @@
     <Setting Name="EC2ItemSet1" Roaming="true" Type="System.String" Scope="User">
       <Value Profile="(Default)">Name,InstanceId,PrivateIpAddress,PublicIpAddress,VpcId,SubnetId,KeyName,SecurityGroups</Value>
     </Setting>
+    <Setting Name="Version" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">0.0</Value>
+    </Setting>
+    <Setting Name="VersionsToIgnore" Roaming="true" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="VersionsRemindDate" Roaming="true" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UpdateUrl" Roaming="true" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://github.com/rickbowden/EC2Info/releases/latest</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -66,6 +66,9 @@
     <Reference Include="rab_base">
       <HintPath>..\..\..\_My_CLASSES\rab_Classes\rab_base\bin\Release\rab_base.dll</HintPath>
     </Reference>
+    <Reference Include="rab_update">
+      <HintPath>..\..\..\_My_CLASSES\rab_Classes\rab_update\bin\Release\rab_update.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -135,7 +138,9 @@
     <Content Include="roles.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="version.txt" />
+    <Content Include="version.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

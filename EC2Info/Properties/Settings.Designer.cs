@@ -101,5 +101,47 @@ namespace EC2Info.Properties {
                 this["EC2ItemSet1"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0")]
+        public string Version {
+            get {
+                return ((string)(this["Version"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public global::System.Collections.Specialized.StringCollection VersionsToIgnore {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VersionsToIgnore"]));
+            }
+            set {
+                this["VersionsToIgnore"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public global::System.DateTime VersionsRemindDate {
+            get {
+                return ((global::System.DateTime)(this["VersionsRemindDate"]));
+            }
+            set {
+                this["VersionsRemindDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/rickbowden/EC2Info/releases/latest")]
+        public string UpdateUrl {
+            get {
+                return ((string)(this["UpdateUrl"]));
+            }
+        }
     }
 }

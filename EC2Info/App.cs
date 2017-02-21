@@ -22,11 +22,15 @@ namespace EC2Info
         static Dictionary<string, string> MfaDevices = new Dictionary<string,string>();
         public static string mfacode = "";
         static DateTime mfaExpires;
+        static string UpdateUrl = Properties.Settings.Default.UpdateUrl;
+        static double ThisVersion = Convert.ToDouble(Properties.Settings.Default.Version);
+        
                
         public App()
         {
             InitializeComponent();
 
+            
             try
             {
                 PopulateMfaDevicesDic();
@@ -38,6 +42,8 @@ namespace EC2Info
                 AWSConfigs.AWSRegion = Properties.Settings.Default.AWSDefaultRegion;
 
                 dataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+
+                CheckForUpdates();
             }
             catch (Exception ex)
             {
@@ -118,6 +124,18 @@ namespace EC2Info
         {
             MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); 
             
+        }
+
+        void CheckForUpdates()
+        {
+            try
+            {
+                backgroundWorkerUpdate.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                DisplayError("Error during update check." + Environment.NewLine + ex.Message);
+            }
         }
         
 
@@ -401,9 +419,36 @@ namespace EC2Info
             }
         }
 
-        
+        private void backgroundWorkerUpdate_DoWork(object sender, DoWorkEventArgs e)
+        {            
+            try
+            {
+                rab_update.Version v = new rab_update.Version(Properties.Settings.Default.Version, Properties.Settings.Default.UpdateUrl);
+                v.CheckForNewVersion();
+                e.Result = v;
+            }
+            catch (Exception ex)
+            {
+                DisplayError("Error during update check." + Environment.NewLine + ex.Message);                
+            }
+            
+        }
 
-        
+
+        private void backgroundWorkerUpdate_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {            
+            if (e.Result is rab_update.Version)
+            {
+                rab_update.Version v = e.Result as rab_update.Version;
+                if (v.UpdateAvailable)
+                {                    
+                    rab_update.UpdateForm uf = new rab_update.UpdateForm(v.NewVersionString, v.CurrentVersion, v.DownloadUrl);
+                    uf.ShowDialog();
+                }
+            }
+        }
+
+
 
 
 

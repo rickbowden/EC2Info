@@ -53,6 +53,7 @@
             this.CopyStyle_CB = new System.Windows.Forms.CheckBox();
             this.ProcessSG_BTN = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.backgroundWorkerUpdate = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -286,6 +287,12 @@
             this.ProcessSG_BTN.UseVisualStyleBackColor = true;
             this.ProcessSG_BTN.Click += new System.EventHandler(this.ProcessSG_BTN_Click);
             // 
+            // backgroundWorkerUpdate
+            // 
+            this.backgroundWorkerUpdate.WorkerReportsProgress = true;
+            this.backgroundWorkerUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdate_DoWork);            
+            this.backgroundWorkerUpdate.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerUpdate_RunWorkerCompleted);
+            // 
             // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -344,6 +351,7 @@
         private System.Windows.Forms.Button ProcessSG_BTN;
         private System.Windows.Forms.CheckBox CopyStyle_CB;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerUpdate;
     }
 }
 

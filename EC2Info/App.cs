@@ -121,8 +121,13 @@ namespace EC2Info
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            using (ColumnChooser cc = new ColumnChooser())
+            string[] savedProps = new string[dataGridView1.Columns.Count];
+            for (int i = 0; i < dataGridView1.Columns.Count; i++)
             {
+                savedProps[i] = dataGridView1.Columns[i].Name;
+            }
+            using (ColumnChooser cc = new ColumnChooser(savedProps))
+            {                
                 cc.StartPosition = FormStartPosition.CenterParent;
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)

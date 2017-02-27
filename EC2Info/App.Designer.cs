@@ -50,11 +50,11 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.ColumnChooser_LNK = new System.Windows.Forms.LinkLabel();
             this.CopyStyle_CB = new System.Windows.Forms.CheckBox();
             this.ProcessSG_BTN = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorkerUpdate = new System.ComponentModel.BackgroundWorker();
-            this.ColumnChooser_LNK = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -270,9 +270,22 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Results";
             // 
+            // ColumnChooser_LNK
+            // 
+            this.ColumnChooser_LNK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ColumnChooser_LNK.AutoSize = true;
+            this.ColumnChooser_LNK.LinkColor = System.Drawing.Color.Blue;
+            this.ColumnChooser_LNK.Location = new System.Drawing.Point(1104, 35);
+            this.ColumnChooser_LNK.Name = "ColumnChooser_LNK";
+            this.ColumnChooser_LNK.Size = new System.Drawing.Size(114, 17);
+            this.ColumnChooser_LNK.TabIndex = 17;
+            this.ColumnChooser_LNK.TabStop = true;
+            this.ColumnChooser_LNK.Text = "Choose Columns";
+            this.ColumnChooser_LNK.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.ColumnChooser_LNK.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // CopyStyle_CB
             // 
-            this.CopyStyle_CB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CopyStyle_CB.AutoSize = true;
             this.CopyStyle_CB.Location = new System.Drawing.Point(245, 34);
             this.CopyStyle_CB.Name = "CopyStyle_CB";
@@ -297,20 +310,6 @@
             this.backgroundWorkerUpdate.WorkerReportsProgress = true;
             this.backgroundWorkerUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdate_DoWork);
             this.backgroundWorkerUpdate.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerUpdate_RunWorkerCompleted);
-            // 
-            // ColumnChooser_LNK
-            // 
-            this.ColumnChooser_LNK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ColumnChooser_LNK.AutoSize = true;
-            this.ColumnChooser_LNK.LinkColor = System.Drawing.Color.Blue;
-            this.ColumnChooser_LNK.Location = new System.Drawing.Point(1092, 35);
-            this.ColumnChooser_LNK.Name = "ColumnChooser_LNK";
-            this.ColumnChooser_LNK.Size = new System.Drawing.Size(126, 17);
-            this.ColumnChooser_LNK.TabIndex = 17;
-            this.ColumnChooser_LNK.TabStop = true;
-            this.ColumnChooser_LNK.Text = "Choose Columns...";
-            this.ColumnChooser_LNK.VisitedLinkColor = System.Drawing.Color.Blue;
-            this.ColumnChooser_LNK.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // App
             // 

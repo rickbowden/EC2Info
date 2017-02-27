@@ -15,7 +15,8 @@ namespace EC2Info
     {
         public StringCollection CheckedItems { get; set; }
         
-        public ColumnChooser()
+        
+        public ColumnChooser(string[] savedColumns)
         {
             InitializeComponent();
 
@@ -29,7 +30,18 @@ namespace EC2Info
                     checkedListBox1.Items.Add(item);
                 }
             }
+
+            //Tick saved columns
+            foreach (string item in savedColumns)
+            {
+                int foundItem = checkedListBox1.FindStringExact(item);
+                if (foundItem != null)
+                {
+                    checkedListBox1.SetItemChecked(foundItem, true);
+                }
+            }
         }
+
 
         private void OK_BTN_Click(object sender, EventArgs e)
         {

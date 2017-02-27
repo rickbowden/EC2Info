@@ -23,23 +23,28 @@ namespace EC2Info.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>eu-west-1</string>
+  <string>ap-northeast-1</string>
+  <string>ap-northeast-2</string>
+  <string>ap-southeast-1</string>
+  <string>ap-southeast-2</string>
+  <string>ap-south-1</string>
+  <string>ca-central-1</string>
   <string>eu-central-1</string>
+  <string>eu-west-1</string>
+  <string>eu-west-2</string>
+  <string>sa-east-1</string>
   <string>us-east-1</string>
+  <string>us-east-2</string>
   <string>us-west-1</string>
   <string>us-west-2</string>
 </ArrayOfString>")]
-        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
         public global::System.Collections.Specialized.StringCollection AWSRegion {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["AWSRegion"]));
-            }
-            set {
-                this["AWSRegion"] = value;
             }
         }
         
@@ -93,12 +98,12 @@ namespace EC2Info.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("Name,InstanceId,PrivateIpAddress,PublicIpAddress,VpcId,SubnetId,KeyName,SecurityG" +
             "roups")]
         [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
-        public string EC2ItemSet1 {
+        public string EC2SavedProperties {
             get {
-                return ((string)(this["EC2ItemSet1"]));
+                return ((string)(this["EC2SavedProperties"]));
             }
             set {
-                this["EC2ItemSet1"] = value;
+                this["EC2SavedProperties"] = value;
             }
         }
         
@@ -141,6 +146,41 @@ namespace EC2Info.Properties {
         public string UpdateUrl {
             get {
                 return ((string)(this["UpdateUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>Architecture</string>
+  <string>EbsOptimized</string>
+  <string>EnaSupport</string>
+  <string>Hypervisor</string>
+  <string>IamInstanceProfile</string>
+  <string>InstanceId</string>
+  <string>InstanceType</string>
+  <string>KernelId</string>
+  <string>KeyName</string>
+  <string>LaunchTime</string>
+  <string>Monitoring</string>
+  <string>Name</string>
+  <string>Platform</string>
+  <string>PrivateDnsName</string>
+  <string>PrivateIpAddress</string>
+  <string>PublicDnsName</string>
+  <string>PublicIpAddress</string>
+  <string>RootDeviceName</string>
+  <string>RootDeviceType</string>
+  <string>SecurityGroups</string>
+  <string>SubnetId</string>
+  <string>State</string>
+  <string>ImageId</string>
+  <string>VpcId</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection EC2Properties {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["EC2Properties"]));
             }
         }
     }

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Amazon;
 using System.Xml.Linq;
+using System.Collections.Specialized;
 
 namespace EC2Info
 {
@@ -20,11 +21,13 @@ namespace EC2Info
     {
         static AWSCredentials creds;               
         static Dictionary<string, string> MfaDevices = new Dictionary<string,string>();
-        public static string mfacode = "";
+        public static string mfacode = string.Empty;
         static DateTime mfaExpires;
         static string UpdateUrl = Properties.Settings.Default.UpdateUrl;
         static double ThisVersion = Convert.ToDouble(Properties.Settings.Default.Version);
-        
+        static string UserName = Environment.UserName;
+        static string AppName = "EC2Info";
+        static StringCollection ColumnItems;
                
         public App()
         {
@@ -37,7 +40,8 @@ namespace EC2Info
                 PopulateRegionDropDown();
                 PopulateProfileDropDown();
                 PopulateRoleDropDown();
-
+                PopulateGridColumns();
+                
                 //Set default region
                 AWSConfigs.AWSRegion = Properties.Settings.Default.AWSDefaultRegion;
 
@@ -115,6 +119,21 @@ namespace EC2Info
             }
         }
 
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            using (ColumnChooser cc = new ColumnChooser())
+            {
+                cc.StartPosition = FormStartPosition.CenterParent;
+                var result = cc.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    ColumnItems = cc.CheckedItems;
+                    SetGridColumns(ColumnItems.Cast<string>().ToArray());
+                }                
+            }
+            
+        }
+        
         //-------------------------------------------------------------------------
         // Control Events (End)
         //-------------------------------------------------------------------------
@@ -122,8 +141,7 @@ namespace EC2Info
 
         void DisplayError(string message)
         {
-            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); 
-            
+            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);            
         }
 
         void CheckForUpdates()
@@ -196,6 +214,16 @@ namespace EC2Info
             AssumeRole_CBB.Items.Insert(0, item0);            
         }
 
+        void PopulateGridColumns()
+        {
+            ColumnItems = new StringCollection();
+            if (Properties.Settings.Default.EC2SavedProperties != null)
+            {
+                ColumnItems.AddRange(Properties.Settings.Default.EC2SavedProperties.Split(','));
+                SetGridColumns(ColumnItems.Cast<string>().ToArray());
+            }
+        }
+
 
         DescribeInstancesResponse GetInstances(List<string> instanceIds)
         {
@@ -229,7 +257,7 @@ namespace EC2Info
         {
             List<string> result = new List<string>();
 
-            if (inputString.Length > 0)
+            if (inputString.Length > 0 && inputString.StartsWith("i-")) //Only Instance Id's currently used
             {
                 string[] a = inputString.Split(',');
                 result = a.ToList();
@@ -244,37 +272,48 @@ namespace EC2Info
             if (creds == null || DateTime.Now >= mfaExpires || AWSConfigs.AWSProfileName != Profile_CBB.Text)
             {
                 AWSConfigs.AWSProfileName = Profile_CBB.Text;
+                creds = new StoredProfileAWSCredentials(Profile_CBB.Text);
                 
-                if (AssumeRole_CBB.Text == "none")
+                
+                if (AssumeRole_CBB.Text != "none")
                 {
-                    creds = new StoredProfileAWSCredentials(Profile_CBB.Text);
-                    
-                }
-                else                
-                {
+                    //Get selected role to assume
                     ComboboxItem o = (ComboboxItem)AssumeRole_CBB.SelectedItem;
-
-                                         
-                                        
+                    //Create AssumeRole request
                     Amazon.SecurityToken.Model.AssumeRoleRequest assumeRequest = new Amazon.SecurityToken.Model.AssumeRoleRequest();
-                    assumeRequest.RoleArn = o.Role;            
-                    assumeRequest.RoleSessionName = "ec2infoapp";
+                    assumeRequest.RoleArn = o.Role;
+                    assumeRequest.RoleSessionName = UserName + "@" + AppName;
 
-                    //Get mfa associated with selected profile
-                    if (MfaDevices.ContainsKey(Profile_CBB.Text))
+                    //Get MFA Device
+                    Amazon.IdentityManagement.AmazonIdentityManagementServiceClient imc = new Amazon.IdentityManagement.AmazonIdentityManagementServiceClient(creds);
+                    Amazon.IdentityManagement.Model.ListMFADevicesRequest mfaRequest = new Amazon.IdentityManagement.Model.ListMFADevicesRequest();
+                    Amazon.IdentityManagement.Model.ListMFADevicesResponse mfaResponse = imc.ListMFADevices(mfaRequest);
+                    if (mfaResponse != null)
                     {
-                        assumeRequest.SerialNumber = MfaDevices[Profile_CBB.Text];
+                        if (mfaResponse.MFADevices.Count > 0)
+                        {
+                            assumeRequest.SerialNumber = mfaResponse.MFADevices[0].SerialNumber;
+                        }
                     }
-                    else
+
+                    //If MFA Device was not obtained
+                    if (assumeRequest.SerialNumber == string.Empty)
                     {
-                        assumeRequest.SerialNumber = MfaDevices["default"];
+                        //Get mfa associated with selected profile
+                        if (MfaDevices.ContainsKey(Profile_CBB.Text))
+                        {
+                            assumeRequest.SerialNumber = MfaDevices[Profile_CBB.Text];
+                        }
+                        else
+                        {
+                            assumeRequest.SerialNumber = MfaDevices["default"];
+                        }
                     }
 
                                         
-
+                    //Get MFA code
                     mfa m = new mfa();
-                    m.ShowDialog();
-                    
+                    m.ShowDialog();                    
                     assumeRequest.TokenCode = mfacode.Trim(); //MFA code
                     
                     Amazon.SecurityToken.AmazonSecurityTokenServiceClient secClient = new Amazon.SecurityToken.AmazonSecurityTokenServiceClient();
@@ -292,13 +331,13 @@ namespace EC2Info
 
         void DisplayResults(DescribeInstancesResponse describeInstanceResponse)
         {                 
-            string[] colHeaders;
-            colHeaders = Properties.Settings.Default.EC2ItemSet1.Split(',');
-            if (colHeaders == null)
-            {
-                colHeaders = new string[] { "Name", "InstanceId" };
-            }
-            SetGridColumns(colHeaders);
+            //string[] colHeaders;
+            //colHeaders = Properties.Settings.Default.EC2SavedProperties.Split(',');
+            //if (colHeaders == null)
+            //{
+            //    colHeaders = new string[] { "Name", "InstanceId" };
+            //}
+            //SetGridColumns(colHeaders);
 
 
             if (describeInstanceResponse != null && describeInstanceResponse.Reservations.Count > 0)
@@ -310,9 +349,9 @@ namespace EC2Info
                         DataGridViewRow row = new DataGridViewRow();                        
                         int rowNumber = dataGridView1.Rows.Add(row);
 
-                        for (int i = 0; i < colHeaders.Length; i++)
+                        for (int i = 0; i < ColumnItems.Count; i++)
                         {
-                            dataGridView1.Rows[rowNumber].Cells[colHeaders[i]].Value = Utils.GetEC2PropFromString(colHeaders[i], instance);
+                            dataGridView1.Rows[rowNumber].Cells[ColumnItems[i]].Value = Utils.GetEC2PropFromString(ColumnItems[i], instance);
                         }
                     }
                 }
@@ -406,17 +445,23 @@ namespace EC2Info
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            ProgressBar1.Style = ProgressBarStyle.Continuous;
-            ProgressBar1.Value = 0;
-
-            
-            if (e.Result != null)
+            if (e.Error != null)
             {
-                if (e.Result is DescribeInstancesResponse)
+                DisplayError(e.Error.Message);
+            }
+            else
+            {
+                if (e.Result != null)
                 {
-                    DisplayResults((DescribeInstancesResponse)e.Result);
+                    if (e.Result is DescribeInstancesResponse)
+                    {
+                        DisplayResults((DescribeInstancesResponse)e.Result);
+                    }
                 }
             }
+
+            ProgressBar1.Style = ProgressBarStyle.Continuous;
+            ProgressBar1.Value = 0;
         }
 
         private void backgroundWorkerUpdate_DoWork(object sender, DoWorkEventArgs e)
@@ -447,6 +492,8 @@ namespace EC2Info
                 }
             }
         }
+
+        
 
 
 

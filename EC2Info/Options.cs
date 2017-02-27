@@ -29,7 +29,7 @@ namespace EC2Info
             }
 
             EC2Items_TB.Clear();            
-            EC2Items_TB.Text = Properties.Settings.Default.EC2ItemSet1;
+            EC2Items_TB.Text = Properties.Settings.Default.EC2SavedProperties;
             
         }
 
@@ -60,7 +60,7 @@ namespace EC2Info
             }
             Properties.Settings.Default.MFADevices = mfas;
 
-            Properties.Settings.Default.EC2ItemSet1 = EC2Items_TB.Text.Trim();
+            Properties.Settings.Default.EC2SavedProperties = EC2Items_TB.Text.Trim();
 
             Properties.Settings.Default.Save();
 

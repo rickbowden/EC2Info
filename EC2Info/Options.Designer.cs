@@ -38,8 +38,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Mfa_TB = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.EC2Items_TB = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.EC2Items_TB = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -95,6 +95,7 @@
             this.Roles_TB.Location = new System.Drawing.Point(12, 57);
             this.Roles_TB.Multiline = true;
             this.Roles_TB.Name = "Roles_TB";
+            this.Roles_TB.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Roles_TB.Size = new System.Drawing.Size(880, 215);
             this.Roles_TB.TabIndex = 0;
             this.Roles_TB.WordWrap = false;
@@ -107,7 +108,7 @@
             this.groupBox2.Controls.Add(this.Mfa_TB);
             this.groupBox2.Location = new System.Drawing.Point(16, 331);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(907, 239);
+            this.groupBox2.Size = new System.Drawing.Size(907, 288);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "MFA Devices";
@@ -117,7 +118,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(9, 21);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(571, 68);
+            this.label2.Size = new System.Drawing.Size(542, 85);
             this.label2.TabIndex = 2;
             this.label2.Text = resources.GetString("label2.Text");
             // 
@@ -125,9 +126,10 @@
             // 
             this.Mfa_TB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Mfa_TB.Location = new System.Drawing.Point(9, 92);
+            this.Mfa_TB.Location = new System.Drawing.Point(9, 121);
             this.Mfa_TB.Multiline = true;
             this.Mfa_TB.Name = "Mfa_TB";
+            this.Mfa_TB.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Mfa_TB.Size = new System.Drawing.Size(880, 133);
             this.Mfa_TB.TabIndex = 0;
             this.Mfa_TB.WordWrap = false;
@@ -138,23 +140,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.EC2Items_TB);
-            this.groupBox3.Location = new System.Drawing.Point(13, 589);
+            this.groupBox3.Location = new System.Drawing.Point(13, 625);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(907, 111);
+            this.groupBox3.Size = new System.Drawing.Size(907, 75);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "EC2 Items";
-            // 
-            // EC2Items_TB
-            // 
-            this.EC2Items_TB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.EC2Items_TB.Location = new System.Drawing.Point(12, 43);
-            this.EC2Items_TB.Multiline = true;
-            this.EC2Items_TB.Name = "EC2Items_TB";
-            this.EC2Items_TB.Size = new System.Drawing.Size(880, 56);
-            this.EC2Items_TB.TabIndex = 1;
-            this.EC2Items_TB.WordWrap = false;
             // 
             // label3
             // 
@@ -164,6 +155,17 @@
             this.label3.Size = new System.Drawing.Size(379, 17);
             this.label3.TabIndex = 2;
             this.label3.Text = "Comma seperated list of EC2 instance properties to display";
+            // 
+            // EC2Items_TB
+            // 
+            this.EC2Items_TB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.EC2Items_TB.Location = new System.Drawing.Point(12, 43);
+            this.EC2Items_TB.Multiline = true;
+            this.EC2Items_TB.Name = "EC2Items_TB";
+            this.EC2Items_TB.Size = new System.Drawing.Size(880, 24);
+            this.EC2Items_TB.TabIndex = 1;
+            this.EC2Items_TB.WordWrap = false;
             // 
             // Options
             // 

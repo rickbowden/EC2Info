@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<roles>
-  <role name="arn:aws:iam::640467343547:role/CA_KCOM_ADM">arn:aws:iam::049793823615:mfa/rbowden.kcom.adm</role>
-</roles>
-

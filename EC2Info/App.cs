@@ -95,7 +95,9 @@ namespace EC2Info
             try
             {
                 Form options = new Options();
-                options.Show();
+                options.ShowDialog();
+                //Reload role dropdown
+                PopulateRoleDropDown();
             }
             catch (Exception ex)
             {
@@ -212,11 +214,14 @@ namespace EC2Info
             AssumeRole_CBB.Sorted = true;
             foreach (string role in Properties.Settings.Default.Roles)	
             {
-              string[]a=role.Split('|');
-              ComboboxItem item = new ComboboxItem();
-              item.Name = a[0];
-              item.Role = a[1];              
-              AssumeRole_CBB.Items.Add(item);
+              string[] a = role.Split('|');
+              if (a.Length > 1)
+              {
+                  ComboboxItem item = new ComboboxItem();
+                  item.Name = a[0];
+                  item.Role = a[1];
+                  AssumeRole_CBB.Items.Add(item);
+              }
             }
             AssumeRole_CBB.Sorted = false;
             ComboboxItem item0 = new ComboboxItem();

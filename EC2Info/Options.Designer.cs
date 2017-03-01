@@ -108,7 +108,7 @@
             this.groupBox2.Controls.Add(this.Mfa_TB);
             this.groupBox2.Location = new System.Drawing.Point(16, 331);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(907, 288);
+            this.groupBox2.Size = new System.Drawing.Size(907, 272);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "MFA Devices";
@@ -152,9 +152,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 23);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(379, 17);
+            this.label3.Size = new System.Drawing.Size(426, 17);
             this.label3.TabIndex = 2;
-            this.label3.Text = "Comma seperated list of EC2 instance properties to display";
+            this.label3.Text = "Comma seperated list of EC2 instance default properties to display";
             // 
             // EC2Items_TB
             // 

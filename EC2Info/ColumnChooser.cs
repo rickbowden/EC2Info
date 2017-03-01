@@ -14,9 +14,9 @@ namespace EC2Info
     public partial class ColumnChooser : Form
     {
         public StringCollection CheckedItems { get; set; }
-        
-        
-        public ColumnChooser(string[] savedColumns)
+
+
+        public ColumnChooser(StringCollection savedColumns)
         {
             InitializeComponent();
 
@@ -35,7 +35,7 @@ namespace EC2Info
             foreach (string item in savedColumns)
             {
                 int foundItem = checkedListBox1.FindStringExact(item);
-                if (foundItem != null)
+                if (foundItem != -1)
                 {
                     checkedListBox1.SetItemChecked(foundItem, true);
                 }

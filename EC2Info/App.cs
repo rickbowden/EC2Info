@@ -27,7 +27,7 @@ namespace EC2Info
         static double ThisVersion = Convert.ToDouble(Properties.Settings.Default.Version);
         static string UserName = Environment.UserName;
         static string AppName = "EC2Info";
-        static StringCollection ColumnItems;
+        static StringCollection ColumnItems = new StringCollection();
                
         public App()
         {
@@ -40,6 +40,7 @@ namespace EC2Info
                 PopulateRegionDropDown();
                 PopulateProfileDropDown();
                 PopulateRoleDropDown();
+                LoadSavedColumnItems();
                 PopulateGridColumns();
                 
                 //Set default region
@@ -73,6 +74,13 @@ namespace EC2Info
                 //Set Creds
                 SetCreds();
 
+                //Reset Grid 
+                PopulateGridColumns();
+                dataGridView1.Rows.Clear();
+
+                Submit_BTN.Enabled = false;
+                ProcessSG_BTN.Enabled = false;
+
                 backgroundWorker1.RunWorkerAsync();
             }
             catch (Exception ex)
@@ -97,13 +105,16 @@ namespace EC2Info
 
         private void ProcessSG_BTN_Click(object sender, EventArgs e)
         {
-            try
+            if (dataGridView1.Rows.Count > 1)
             {
-                ProcessSecurityGroups();
-            }
-            catch (Exception ex)
-            {
-                DisplayError(ex.Message);
+                try
+                {
+                    ProcessSecurityGroups();
+                }
+                catch (Exception ex)
+                {
+                    DisplayError(ex.Message);
+                }
             }
         }
 
@@ -120,20 +131,15 @@ namespace EC2Info
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            string[] savedProps = new string[dataGridView1.Columns.Count];
-            for (int i = 0; i < dataGridView1.Columns.Count; i++)
-            {
-                savedProps[i] = dataGridView1.Columns[i].Name;
-            }
-            using (ColumnChooser cc = new ColumnChooser(savedProps))
+        {   
+            using (ColumnChooser cc = new ColumnChooser(ColumnItems))
             {                
                 cc.StartPosition = FormStartPosition.CenterParent;
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
                 {
                     ColumnItems = cc.CheckedItems;
-                    SetGridColumns(ColumnItems.Cast<string>().ToArray());
+                    PopulateGridColumns();
                 }                
             }
             
@@ -221,11 +227,25 @@ namespace EC2Info
 
         void PopulateGridColumns()
         {
-            ColumnItems = new StringCollection();
+            if (ColumnItems.Count > 0)
+            {
+                // Clear Grid
+                dataGridView1.Rows.Clear();
+                dataGridView1.Columns.Clear();
+                //DataGridViewCellStyle cs = dataGridView1.DefaultCellStyle;
+                for (int i = 0; i < ColumnItems.Count; i++)
+                {
+                    dataGridView1.Columns.Add(ColumnItems[i], ColumnItems[i]);
+                }
+            }            
+        }
+
+        void LoadSavedColumnItems()
+        {
             if (Properties.Settings.Default.EC2SavedProperties != null)
             {
                 ColumnItems.AddRange(Properties.Settings.Default.EC2SavedProperties.Split(','));
-                SetGridColumns(ColumnItems.Cast<string>().ToArray());
+                
             }
         }
 
@@ -368,14 +388,7 @@ namespace EC2Info
         void SetGridColumns(string[] colHeaders)
         {
             
-            // Clear Grid
-            dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Clear();
-            //DataGridViewCellStyle cs = dataGridView1.DefaultCellStyle;
-            for (int i = 0; i < colHeaders.Length; i++)
-            {
-                dataGridView1.Columns.Add(colHeaders[i], colHeaders[i]);
-            }
+            
         }
 
         void ProcessSecurityGroups()
@@ -467,6 +480,8 @@ namespace EC2Info
 
             ProgressBar1.Style = ProgressBarStyle.Continuous;
             ProgressBar1.Value = 0;
+            Submit_BTN.Enabled = true;
+            ProcessSG_BTN.Enabled = true;
         }
 
         private void backgroundWorkerUpdate_DoWork(object sender, DoWorkEventArgs e)

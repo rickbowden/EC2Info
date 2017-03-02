@@ -32,10 +32,11 @@ namespace EC2Info
         public App()
         {
             InitializeComponent();
-
-            
+                        
             try
             {
+                Properties.Settings.Default.Upgrade();
+
                 PopulateMfaDevicesDic();
                 PopulateRegionDropDown();
                 PopulateProfileDropDown();
@@ -157,19 +158,7 @@ namespace EC2Info
             MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);            
         }
 
-        void CheckForUpdates()
-        {
-            try
-            {
-                backgroundWorkerUpdate.RunWorkerAsync();
-            }
-            catch (Exception ex)
-            {
-                DisplayError("Error during update check." + Environment.NewLine + ex.Message);
-            }
-        }
-        
-
+              
         void PopulateMfaDevicesDic()
         {
             if (MfaDevices != null)
@@ -488,6 +477,20 @@ namespace EC2Info
             Submit_BTN.Enabled = true;
             ProcessSG_BTN.Enabled = true;
         }
+
+
+        void CheckForUpdates()
+        {
+            try
+            {
+                backgroundWorkerUpdate.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                DisplayError("Error during update check." + Environment.NewLine + ex.Message);
+            }
+        }
+
 
         private void backgroundWorkerUpdate_DoWork(object sender, DoWorkEventArgs e)
         {            

@@ -142,7 +142,8 @@ namespace EC2Info
                 if (result == DialogResult.OK)
                 {
                     ColumnItems = cc.CheckedItems;
-                    PopulateGridColumns();
+                    //PopulateGridColumns();
+                    UpdateGridColumns();
                 }                
             }
             
@@ -225,13 +226,48 @@ namespace EC2Info
             {
                 // Clear Grid
                 dataGridView1.Rows.Clear();
-                dataGridView1.Columns.Clear();
-                //DataGridViewCellStyle cs = dataGridView1.DefaultCellStyle;
+                dataGridView1.Columns.Clear();                
                 for (int i = 0; i < ColumnItems.Count; i++)
                 {
                     dataGridView1.Columns.Add(ColumnItems[i], ColumnItems[i]);
                 }
             }            
+        }
+
+        void UpdateGridColumns()
+        {
+            if (ColumnItems.Count > 0)
+            {                
+                for (int i = 0; i < ColumnItems.Count; i++)
+                {
+                    if (!(dataGridView1.Columns.Contains(ColumnItems[i])))
+                    {
+                        dataGridView1.Columns.Add(ColumnItems[i], ColumnItems[i]);
+                    }
+                }
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    if (!(ColumnItems.Contains(dataGridView1.Columns[i].Name)))
+                    {
+                        if (!(dataGridView1.Columns[i].Name.StartsWith("sg-")))
+                        {
+                            dataGridView1.Columns.Remove(dataGridView1.Columns[i].Name);
+                        }
+                    }
+                }
+
+                if (dataGridView1.Columns.Contains("SecurityGroups"))
+                {
+                    for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                    {
+                        if (dataGridView1.Columns[i].Name.StartsWith("sg-"))
+                        {
+                            dataGridView1.Columns.Remove("SecurityGroups");
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         void LoadSavedColumnItems()
@@ -447,6 +483,7 @@ namespace EC2Info
                     break;
                 case 1:
                     ProgressBar1.Style = ProgressBarStyle.Marquee;
+                    Status_LB.Text = "Getting Information";
                     break;
                 case 2:
                     break;
@@ -476,6 +513,7 @@ namespace EC2Info
             ProgressBar1.Value = 0;
             Submit_BTN.Enabled = true;
             ProcessSG_BTN.Enabled = true;
+            Status_LB.Text = "Finished";
         }
 
 

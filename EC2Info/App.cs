@@ -515,7 +515,7 @@ namespace EC2Info
                 rab_update.Version v = e.Result as rab_update.Version;
                 if (v.UpdateAvailable)
                 {                    
-                    rab_update.UpdateForm uf = new rab_update.UpdateForm(v.NewVersionString, v.CurrentVersion, v.DownloadUrl);
+                    rab_update.UpdateForm uf = new rab_update.UpdateForm(v.NewVersionString, v.CurrentVersion, v.DownloadUrl, AppName);
                     uf.ShowDialog();
                 }
             }

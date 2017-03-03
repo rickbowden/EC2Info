@@ -36,7 +36,7 @@
       <Value Profile="(Default)">Name,InstanceId,PrivateIpAddress,PublicIpAddress,VpcId,SubnetId,KeyName,SecurityGroups</Value>
     </Setting>
     <Setting Name="Version" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">0.4</Value>
+      <Value Profile="(Default)">0.5</Value>
     </Setting>
     <Setting Name="VersionsToIgnore" Roaming="true" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
@@ -75,6 +75,9 @@
   &lt;string&gt;ImageId&lt;/string&gt;
   &lt;string&gt;VpcId&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="UpgradeRequired" Roaming="true" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

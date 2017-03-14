@@ -49,12 +49,15 @@
             this.Status_LB = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.searchName_RB = new System.Windows.Forms.RadioButton();
+            this.searchInstance_RB = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.ColumnChooser_LNK = new System.Windows.Forms.LinkLabel();
             this.CopyStyle_CB = new System.Windows.Forms.CheckBox();
             this.ProcessSG_BTN = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorkerUpdate = new System.ComponentModel.BackgroundWorker();
+            this.searchPrivateIp_RB = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -78,7 +81,7 @@
             // 
             this.search_TB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.search_TB.Location = new System.Drawing.Point(17, 26);
+            this.search_TB.Location = new System.Drawing.Point(17, 47);
             this.search_TB.Name = "search_TB";
             this.search_TB.Size = new System.Drawing.Size(1202, 22);
             this.search_TB.TabIndex = 5;
@@ -238,20 +241,45 @@
             this.dataGridView1.Location = new System.Drawing.Point(16, 71);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(1202, 404);
+            this.dataGridView1.Size = new System.Drawing.Size(1202, 380);
             this.dataGridView1.TabIndex = 14;
             // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.searchPrivateIp_RB);
+            this.groupBox3.Controls.Add(this.searchName_RB);
+            this.groupBox3.Controls.Add(this.searchInstance_RB);
             this.groupBox3.Controls.Add(this.search_TB);
             this.groupBox3.Location = new System.Drawing.Point(12, 116);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1241, 69);
+            this.groupBox3.Size = new System.Drawing.Size(1241, 89);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Search";
+            // 
+            // searchName_RB
+            // 
+            this.searchName_RB.AutoSize = true;
+            this.searchName_RB.Location = new System.Drawing.Point(131, 20);
+            this.searchName_RB.Name = "searchName_RB";
+            this.searchName_RB.Size = new System.Drawing.Size(66, 21);
+            this.searchName_RB.TabIndex = 7;
+            this.searchName_RB.Text = "Name";
+            this.searchName_RB.UseVisualStyleBackColor = true;
+            // 
+            // searchInstance_RB
+            // 
+            this.searchInstance_RB.AutoSize = true;
+            this.searchInstance_RB.Checked = true;
+            this.searchInstance_RB.Location = new System.Drawing.Point(17, 20);
+            this.searchInstance_RB.Name = "searchInstance_RB";
+            this.searchInstance_RB.Size = new System.Drawing.Size(93, 21);
+            this.searchInstance_RB.TabIndex = 6;
+            this.searchInstance_RB.TabStop = true;
+            this.searchInstance_RB.Text = "InstanceId";
+            this.searchInstance_RB.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
@@ -263,9 +291,9 @@
             this.groupBox4.Controls.Add(this.ProcessSG_BTN);
             this.groupBox4.Controls.Add(this.dataGridView1);
             this.groupBox4.Controls.Add(this.Submit_BTN);
-            this.groupBox4.Location = new System.Drawing.Point(13, 201);
+            this.groupBox4.Location = new System.Drawing.Point(13, 225);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1240, 495);
+            this.groupBox4.Size = new System.Drawing.Size(1240, 471);
             this.groupBox4.TabIndex = 16;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Results";
@@ -310,6 +338,16 @@
             this.backgroundWorkerUpdate.WorkerReportsProgress = true;
             this.backgroundWorkerUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdate_DoWork);
             this.backgroundWorkerUpdate.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerUpdate_RunWorkerCompleted);
+            // 
+            // searchPrivateIp_RB
+            // 
+            this.searchPrivateIp_RB.AutoSize = true;
+            this.searchPrivateIp_RB.Location = new System.Drawing.Point(220, 20);
+            this.searchPrivateIp_RB.Name = "searchPrivateIp_RB";
+            this.searchPrivateIp_RB.Size = new System.Drawing.Size(89, 21);
+            this.searchPrivateIp_RB.TabIndex = 8;
+            this.searchPrivateIp_RB.Text = "Private IP";
+            this.searchPrivateIp_RB.UseVisualStyleBackColor = true;
             // 
             // App
             // 
@@ -371,6 +409,9 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.ComponentModel.BackgroundWorker backgroundWorkerUpdate;
         private System.Windows.Forms.LinkLabel ColumnChooser_LNK;
+        private System.Windows.Forms.RadioButton searchName_RB;
+        private System.Windows.Forms.RadioButton searchInstance_RB;
+        private System.Windows.Forms.RadioButton searchPrivateIp_RB;
     }
 }
 

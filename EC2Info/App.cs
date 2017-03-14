@@ -291,13 +291,7 @@ namespace EC2Info
 
             using (AmazonEC2Client EC2client = new AmazonEC2Client(creds))
             {
-                DescribeInstancesRequest rq = new DescribeInstancesRequest();
-                //List<Filter> filterList = new List<Filter>();
-                //Filter filter = new Filter();
-                //filter.Name = "instance-id";
-                //filter.Values = instanceIds;
-                //filterList.Add(filter);
-                //rq.Filters = filterList;
+                DescribeInstancesRequest rq = new DescribeInstancesRequest();                
                 rq.InstanceIds = instanceIds;
                 if (instanceIds.Count == 0)
                 {
@@ -311,17 +305,55 @@ namespace EC2Info
 
             return result;
         }
+        DescribeInstancesResponse GetInstances(List<Filter> searchFilters)
+        {
+            DescribeInstancesResponse result = null;
 
+            using (AmazonEC2Client EC2client = new AmazonEC2Client(creds))
+            {
+                DescribeInstancesRequest rq = new DescribeInstancesRequest();                
+                rq.Filters = searchFilters;                
+                if (searchFilters == null)
+                {
+                    result = EC2client.DescribeInstances();
+                }
+                else
+                {
+                    result = EC2client.DescribeInstances(rq);
+                }
+            }
+
+            return result;
+        }
+
+
+        static List<Filter> BuildFilter(string inputString, string searchItem)
+        {
+            List<Filter> filterList = new List<Filter>();
+            Filter f = new Filter();
+            string[] a = inputString.Split(',');
+            if (a.Length > 0)
+            {               
+                f.Name = searchItem;
+                for (int i = 0; i < a.Length; i++)
+                {
+                    f.Values.Add(a[i].Trim());
+                }               
+                
+            }
+            filterList.Add(f);
+
+            return filterList;
+        }
 
         static List<string> BuildSearchString(string inputString)
         {
             List<string> result = new List<string>();
 
-            if (inputString.Length > 0 && inputString.StartsWith("i-")) //Only Instance Id's currently used
-            {
+            
                 string[] a = inputString.Split(',');
                 result = a.ToList();
-            }
+            
 
             return result;
         }
@@ -391,14 +423,7 @@ namespace EC2Info
 
         void DisplayResults(DescribeInstancesResponse describeInstanceResponse)
         {                 
-            //string[] colHeaders;
-            //colHeaders = Properties.Settings.Default.EC2SavedProperties.Split(',');
-            //if (colHeaders == null)
-            //{
-            //    colHeaders = new string[] { "Name", "InstanceId" };
-            //}
-            //SetGridColumns(colHeaders);
-
+            
 
             if (describeInstanceResponse != null && describeInstanceResponse.Reservations.Count > 0)
             {
@@ -474,8 +499,23 @@ namespace EC2Info
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            string searchItem = string.Empty;
+            if (searchInstance_RB.Checked)
+            {
+                searchItem = "instance-id";
+            }
+            else if (searchName_RB.Checked)
+            {
+                searchItem = "tag:Name";
+            }
+            else if (searchPrivateIp_RB.Checked)
+            {
+                searchItem = "private-ip-address";
+            }
+
+            
             backgroundWorker1.ReportProgress(1, 1);
-            DescribeInstancesResponse dir = GetInstances(BuildSearchString(search_TB.Text));
+            DescribeInstancesResponse dir = GetInstances(BuildFilter(search_TB.Text, searchItem));            
             e.Result = dir;
         }
 

@@ -1,2 +1,10 @@
-﻿v0.6
+﻿v0.7 16/03/2017
+Pre-release
+
+* Fixed bug that prevented returning any informarion if the search box was empty.
+* Fixed bug that caused an exception when an instance had no security groups attached.
+
+
+
+v0.6
 Pre-release

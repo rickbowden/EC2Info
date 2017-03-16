@@ -313,7 +313,7 @@ namespace EC2Info
             {
                 DescribeInstancesRequest rq = new DescribeInstancesRequest();                
                 rq.Filters = searchFilters;                
-                if (searchFilters == null)
+                if (searchFilters[0].Values[0] == "")
                 {
                     result = EC2client.DescribeInstances();
                 }

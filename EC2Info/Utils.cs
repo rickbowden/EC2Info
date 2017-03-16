@@ -140,7 +140,14 @@ namespace EC2Info
                     result = result + "," + sg.GroupId;
                 }
             }
-            return result.Substring(1, result.Length-1);
+            if (result.Length > 0)
+            {
+                return result.Substring(1, result.Length - 1);
+            }
+            else
+            {
+                return result;
+            }
         }
 
     }

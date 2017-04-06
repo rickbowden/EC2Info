@@ -27,6 +27,11 @@ namespace EC2Info
             {
                 Mfa_TB.AppendText(item + Environment.NewLine);
             }
+            Tags_TB.Clear();
+            foreach (string item in Properties.Settings.Default.Tags)
+            {
+                Tags_TB.AppendText(item + Environment.NewLine);
+            }
 
             EC2Items_TB.Clear();            
             EC2Items_TB.Text = Properties.Settings.Default.EC2SavedProperties;
@@ -60,10 +65,21 @@ namespace EC2Info
             }
             Properties.Settings.Default.MFADevices = mfas;
 
-            Properties.Settings.Default.EC2SavedProperties = EC2Items_TB.Text.Trim();
+
+            System.Collections.Specialized.StringCollection tags = new System.Collections.Specialized.StringCollection();
+            foreach (string item in Tags_TB.Lines)
+            {
+                if (item.Length > 0)
+                {
+                    tags.Add(item.Trim());
+                }
+            }
+            Properties.Settings.Default.Tags = tags;
+
+
+            Properties.Settings.Default.EC2SavedProperties = EC2Items_TB.Text.Trim();            
 
             Properties.Settings.Default.Save();
-
 
             this.Close();
 

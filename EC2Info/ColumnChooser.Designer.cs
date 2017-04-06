@@ -50,7 +50,7 @@
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(13, 13);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(210, 310);
+            this.checkedListBox1.Size = new System.Drawing.Size(319, 310);
             this.checkedListBox1.Sorted = true;
             this.checkedListBox1.TabIndex = 1;
             // 
@@ -68,7 +68,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(253, 395);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(346, 395);
             this.Controls.Add(this.Save_BTN);
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.OK_BTN);

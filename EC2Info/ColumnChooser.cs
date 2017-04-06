@@ -30,6 +30,14 @@ namespace EC2Info
                     checkedListBox1.Items.Add(item);
                 }
             }
+            if (Properties.Settings.Default.Tags != null)
+            {
+                foreach (string item in Properties.Settings.Default.Tags)
+                {
+                    checkedListBox1.Items.Add(item);
+                }
+            }
+
 
             //Tick saved columns
             foreach (string item in savedColumns)

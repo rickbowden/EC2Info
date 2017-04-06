@@ -105,7 +105,7 @@ namespace EC2Info.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.7")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
         public string Version {
             get {
                 return ((string)(this["Version"]));
@@ -173,7 +173,6 @@ namespace EC2Info.Properties {
   <string>State</string>
   <string>ImageId</string>
   <string>VpcId</string>
-  <string>Tags</string>
 </ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection EC2Properties {
             get {

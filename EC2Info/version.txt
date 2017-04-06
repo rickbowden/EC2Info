@@ -1,4 +1,10 @@
-﻿v0.7 16/03/2017
+﻿v0.8 06/04/2017
+Pre-release
+
+* Added functionality to get and display instance tags and allow the user to save the list of tags between sessions.
+
+
+v0.7 16/03/2017
 Pre-release
 
 * Fixed bug that prevented returning any informarion if the search box was empty.

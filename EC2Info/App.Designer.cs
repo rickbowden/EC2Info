@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(App));
             this.Profile_CBB = new System.Windows.Forms.ComboBox();
             this.search_TB = new System.Windows.Forms.TextBox();
             this.AWSRegion_CBB = new System.Windows.Forms.ComboBox();
@@ -49,15 +53,18 @@
             this.Status_LB = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.searchPrivateIp_RB = new System.Windows.Forms.RadioButton();
             this.searchName_RB = new System.Windows.Forms.RadioButton();
             this.searchInstance_RB = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.WrapCells_CB = new System.Windows.Forms.CheckBox();
             this.ColumnChooser_LNK = new System.Windows.Forms.LinkLabel();
             this.CopyStyle_CB = new System.Windows.Forms.CheckBox();
             this.ProcessSG_BTN = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorkerUpdate = new System.ComponentModel.BackgroundWorker();
-            this.searchPrivateIp_RB = new System.Windows.Forms.RadioButton();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.versionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -85,8 +92,7 @@
             this.search_TB.Name = "search_TB";
             this.search_TB.Size = new System.Drawing.Size(1202, 22);
             this.search_TB.TabIndex = 5;
-            this.toolTip1.SetToolTip(this.search_TB, "A comma seperated list of items to search for. Only InstanceId\'s are excepted at " +
-        "this time.");
+            this.toolTip1.SetToolTip(this.search_TB, "A comma seperated list of items to search for.");
             // 
             // AWSRegion_CBB
             // 
@@ -163,7 +169,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolsToolStripMenuItem});
+            this.toolsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1276, 28);
@@ -181,7 +188,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -235,11 +242,33 @@
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.Location = new System.Drawing.Point(16, 71);
             this.dataGridView1.Name = "dataGridView1";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridView1.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(1202, 380);
             this.dataGridView1.TabIndex = 14;
@@ -258,6 +287,16 @@
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Search";
+            // 
+            // searchPrivateIp_RB
+            // 
+            this.searchPrivateIp_RB.AutoSize = true;
+            this.searchPrivateIp_RB.Location = new System.Drawing.Point(220, 20);
+            this.searchPrivateIp_RB.Name = "searchPrivateIp_RB";
+            this.searchPrivateIp_RB.Size = new System.Drawing.Size(89, 21);
+            this.searchPrivateIp_RB.TabIndex = 8;
+            this.searchPrivateIp_RB.Text = "Private IP";
+            this.searchPrivateIp_RB.UseVisualStyleBackColor = true;
             // 
             // searchName_RB
             // 
@@ -286,6 +325,7 @@
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.WrapCells_CB);
             this.groupBox4.Controls.Add(this.ColumnChooser_LNK);
             this.groupBox4.Controls.Add(this.CopyStyle_CB);
             this.groupBox4.Controls.Add(this.ProcessSG_BTN);
@@ -297,6 +337,18 @@
             this.groupBox4.TabIndex = 16;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Results";
+            // 
+            // WrapCells_CB
+            // 
+            this.WrapCells_CB.AutoSize = true;
+            this.WrapCells_CB.Location = new System.Drawing.Point(450, 34);
+            this.WrapCells_CB.Name = "WrapCells_CB";
+            this.WrapCells_CB.Size = new System.Drawing.Size(149, 21);
+            this.WrapCells_CB.TabIndex = 18;
+            this.WrapCells_CB.Text = "Wrap muliple items";
+            this.toolTip1.SetToolTip(this.WrapCells_CB, resources.GetString("WrapCells_CB.ToolTip"));
+            this.WrapCells_CB.UseVisualStyleBackColor = true;
+            this.WrapCells_CB.CheckedChanged += new System.EventHandler(this.WrapCells_CB_CheckedChanged);
             // 
             // ColumnChooser_LNK
             // 
@@ -330,6 +382,7 @@
             this.ProcessSG_BTN.Size = new System.Drawing.Size(102, 25);
             this.ProcessSG_BTN.TabIndex = 15;
             this.ProcessSG_BTN.Text = "SG Arrange";
+            this.toolTip1.SetToolTip(this.ProcessSG_BTN, "This will arrange multiple security groups into seperate columns.");
             this.ProcessSG_BTN.UseVisualStyleBackColor = true;
             this.ProcessSG_BTN.Click += new System.EventHandler(this.ProcessSG_BTN_Click);
             // 
@@ -339,15 +392,20 @@
             this.backgroundWorkerUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdate_DoWork);
             this.backgroundWorkerUpdate.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerUpdate_RunWorkerCompleted);
             // 
-            // searchPrivateIp_RB
+            // helpToolStripMenuItem
             // 
-            this.searchPrivateIp_RB.AutoSize = true;
-            this.searchPrivateIp_RB.Location = new System.Drawing.Point(220, 20);
-            this.searchPrivateIp_RB.Name = "searchPrivateIp_RB";
-            this.searchPrivateIp_RB.Size = new System.Drawing.Size(89, 21);
-            this.searchPrivateIp_RB.TabIndex = 8;
-            this.searchPrivateIp_RB.Text = "Private IP";
-            this.searchPrivateIp_RB.UseVisualStyleBackColor = true;
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.versionToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // versionToolStripMenuItem
+            // 
+            this.versionToolStripMenuItem.Name = "versionToolStripMenuItem";
+            this.versionToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.versionToolStripMenuItem.Text = "Version";
+            this.versionToolStripMenuItem.Click += new System.EventHandler(this.versionToolStripMenuItem_Click);
             // 
             // App
             // 
@@ -412,6 +470,9 @@
         private System.Windows.Forms.RadioButton searchName_RB;
         private System.Windows.Forms.RadioButton searchInstance_RB;
         private System.Windows.Forms.RadioButton searchPrivateIp_RB;
+        private System.Windows.Forms.CheckBox WrapCells_CB;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem versionToolStripMenuItem;
     }
 }
 

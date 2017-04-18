@@ -14,27 +14,33 @@ namespace EC2Info
     public partial class ColumnChooser : Form
     {
         public StringCollection CheckedItems { get; set; }
-
+        MyListBox m = new MyListBox();
 
         public ColumnChooser(StringCollection savedColumns)
         {
             InitializeComponent();
 
+            m.CheckOnClick = true;
+            m.Dock = DockStyle.Fill;
+            m.ItemHeight = 20;
+            m.BorderStyle = BorderStyle.None;
+            groupBox1.Controls.Add(m);
+
             CheckedItems = new StringCollection();
 
-            checkedListBox1.Items.Clear();
+            m.Items.Clear();
             if (Properties.Settings.Default.EC2Properties != null)
             {
                 foreach (string item in Properties.Settings.Default.EC2Properties)
                 {
-                    checkedListBox1.Items.Add(item);
+                    m.Items.Add(item);
                 }
             }
             if (Properties.Settings.Default.Tags != null)
             {
                 foreach (string item in Properties.Settings.Default.Tags)
                 {
-                    checkedListBox1.Items.Add(item);
+                    m.Items.Add(item);
                 }
             }
 
@@ -42,12 +48,13 @@ namespace EC2Info
             //Tick saved columns
             foreach (string item in savedColumns)
             {
-                int foundItem = checkedListBox1.FindStringExact(item);
+                int foundItem = m.FindStringExact(item);
                 if (foundItem != -1)
                 {
-                    checkedListBox1.SetItemChecked(foundItem, true);
+                    m.SetItemChecked(foundItem, true);
                 }
             }
+                
         }
 
 
@@ -57,7 +64,7 @@ namespace EC2Info
             {
                 CheckedItems.Clear();
             }
-            foreach (string item in checkedListBox1.CheckedItems)
+            foreach (string item in m.CheckedItems)
             {
                 CheckedItems.Add(item);
             }
@@ -67,7 +74,7 @@ namespace EC2Info
         private void Save_BTN_Click(object sender, EventArgs e)
         {
             string temp = string.Empty;
-            foreach (string item in checkedListBox1.CheckedItems)
+            foreach (string item in m.CheckedItems)
             {
                 temp += "," + item;
             }
@@ -77,5 +84,14 @@ namespace EC2Info
                 Properties.Settings.Default.Save();
             }
         }
+    }
+
+    public sealed class MyListBox : CheckedListBox
+    {
+        public MyListBox()
+        {
+            ItemHeight = 30;
+        }
+        public override int ItemHeight { get; set; }
     }
 }

@@ -105,7 +105,7 @@ namespace EC2Info.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
         public string Version {
             get {
                 return ((string)(this["Version"]));
@@ -150,6 +150,9 @@ namespace EC2Info.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <string>Architecture</string>
+  <string>BlockDeviceMappings</string>
+  <string>BlockDeviceNames</string>
+  <string>BlockDeviceVolumeIds</string>
   <string>EbsOptimized</string>
   <string>EnaSupport</string>
   <string>Hypervisor</string>
@@ -161,6 +164,9 @@ namespace EC2Info.Properties {
   <string>LaunchTime</string>
   <string>Monitoring</string>
   <string>Name</string>
+  <string>NetworkInterfaces</string>
+  <string>NetworkInterfaceIds</string>
+  <string>NetworkInterfacePrivateIps</string>
   <string>Platform</string>
   <string>PrivateDnsName</string>
   <string>PrivateIpAddress</string>
@@ -169,8 +175,13 @@ namespace EC2Info.Properties {
   <string>RootDeviceName</string>
   <string>RootDeviceType</string>
   <string>SecurityGroups</string>
-  <string>SubnetId</string>
+  <string>Snapshots</string>
+  <string>StackCreationTime</string>
+  <string>StackName</string>
+  <string>StackId</string>
+  <string>StackLogicalId</string>
   <string>State</string>
+  <string>SubnetId</string>
   <string>ImageId</string>
   <string>VpcId</string>
 </ArrayOfString>")]
@@ -196,8 +207,7 @@ namespace EC2Info.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>Tag=aws:cloudformation:stack-name</string>\r\n</ArrayOfString>")]
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />")]
         [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
         public global::System.Collections.Specialized.StringCollection Tags {
             get {
@@ -205,6 +215,42 @@ namespace EC2Info.Properties {
             }
             set {
                 this["Tags"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("aws:cloudformation:stack-name")]
+        public string StackNameTag {
+            get {
+                return ((string)(this["StackNameTag"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("aws:cloudformation:stack-id")]
+        public string StackIdTag {
+            get {
+                return ((string)(this["StackIdTag"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("aws:cloudformation:logical-id")]
+        public string StackLogicalIdTag {
+            get {
+                return ((string)(this["StackLogicalIdTag"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("yyyy-MM-dd HH:mm:ss")]
+        public string DateTimeFormat {
+            get {
+                return ((string)(this["DateTimeFormat"]));
             }
         }
     }

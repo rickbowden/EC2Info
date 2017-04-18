@@ -59,5 +59,31 @@ namespace EC2Info.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to v0.9 13/04/2017
+        ///Pre-release
+        ///
+        ///* Added functionality to get and display network interfaces, block device mappings, snapshots.
+        ///* Added function to display multiple items in either a single line or multiple lines.
+        ///
+        ///
+        ///v0.8 06/04/2017
+        ///Pre-release
+        ///
+        ///* Added functionality to get and display instance tags and allow the user to save the list of tags between sessions.
+        ///
+        ///
+        ///v0.7 16/03/2017
+        ///Pre-release
+        ///
+        ///* Fixed bug that prevented returning any informarion if the search box was empty.
+        ///* Fixed bug that caused  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string version {
+            get {
+                return ResourceManager.GetString("version", resourceCulture);
+            }
+        }
     }
 }

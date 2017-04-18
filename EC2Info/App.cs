@@ -14,6 +14,8 @@ using System.Windows.Forms;
 using Amazon;
 using System.Xml.Linq;
 using System.Collections.Specialized;
+using Amazon.CloudFormation.Model;
+using Amazon.CloudFormation;
 
 namespace EC2Info
 {
@@ -28,11 +30,18 @@ namespace EC2Info
         static string UserName = Environment.UserName;
         static string AppName = "EC2Info";
         static StringCollection ColumnItems = new StringCollection();
+        public static bool WrapCells = false;
+
+        public static List<Snapshot> Snapshots = new List<Snapshot>();
+        public static List<Amazon.EC2.Model.Image> AMIs = new List<Amazon.EC2.Model.Image>();
+        public static List<StackSummary> StackSummaries = new List<StackSummary>();
+        public static List<Reservation> Reservations = new List<Reservation>();
+        public static List<Stack> Stacks = new List<Stack>();
                
         public App()
         {
             InitializeComponent();
-                        
+            
             try
             {
                 if (Properties.Settings.Default.UpgradeRequired)
@@ -69,6 +78,12 @@ namespace EC2Info
         // Control Events (Start)
         //-------------------------------------------------------------------------
 
+        private void WrapCells_CB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (WrapCells_CB.Checked) { WrapCells = true; }
+            if (!(WrapCells_CB.Checked)) { WrapCells = false; }
+        }
+
         private void Submit_BTN_Click(object sender, EventArgs e)
         {
             if (Profile_CBB.Text == "select a profile") { return; }
@@ -83,6 +98,11 @@ namespace EC2Info
                 //Reset Grid 
                 PopulateGridColumns();
                 dataGridView1.Rows.Clear();
+
+                Reservations.Clear();
+                StackSummaries.Clear();
+                AMIs.Clear();
+                Snapshots.Clear();
 
                 Submit_BTN.Enabled = false;
                 ProcessSG_BTN.Enabled = false;
@@ -153,7 +173,21 @@ namespace EC2Info
             }
             
         }
-        
+
+        private void versionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                rab_Base.TextBox tb = new rab_Base.TextBox(600, 800, "Version Info", Properties.Resources.version);
+                tb.StartPosition = FormStartPosition.CenterParent;
+                tb.Show();
+            }
+            catch (Exception)
+            {
+
+            }   
+        }
+
         //-------------------------------------------------------------------------
         // Control Events (End)
         //-------------------------------------------------------------------------
@@ -235,6 +269,7 @@ namespace EC2Info
                 for (int i = 0; i < ColumnItems.Count; i++)
                 {
                     dataGridView1.Columns.Add(ColumnItems[i], ColumnItems[i]);
+                    
                 }
             }            
         }
@@ -285,7 +320,7 @@ namespace EC2Info
         }
 
 
-        DescribeInstancesResponse GetInstances(List<string> instanceIds)
+        DescribeInstancesResponse GetInstances(List<string> instanceIds, string nextToken = null)
         {
             DescribeInstancesResponse result = null;
 
@@ -293,6 +328,7 @@ namespace EC2Info
             {
                 DescribeInstancesRequest rq = new DescribeInstancesRequest();                
                 rq.InstanceIds = instanceIds;
+                rq.NextToken = nextToken;
                 if (instanceIds.Count == 0)
                 {
                     result = EC2client.DescribeInstances();
@@ -305,14 +341,15 @@ namespace EC2Info
 
             return result;
         }
-        DescribeInstancesResponse GetInstances(List<Filter> searchFilters)
+        DescribeInstancesResponse GetInstances(List<Filter> searchFilters, string nextToken = null)
         {
             DescribeInstancesResponse result = null;
 
             using (AmazonEC2Client EC2client = new AmazonEC2Client(creds))
             {
                 DescribeInstancesRequest rq = new DescribeInstancesRequest();                
-                rq.Filters = searchFilters;                
+                rq.Filters = searchFilters;
+                rq.NextToken = nextToken;
                 if (searchFilters[0].Values[0] == "")
                 {
                     result = EC2client.DescribeInstances();
@@ -321,6 +358,64 @@ namespace EC2Info
                 {
                     result = EC2client.DescribeInstances(rq);
                 }
+            }
+
+            return result;
+        }
+
+
+        ListStacksResponse GetStackSummaries(string nextToken = null)
+        {
+            ListStacksResponse result = null;
+            
+            using(AmazonCloudFormationClient CFclient = new AmazonCloudFormationClient())
+            {
+                ListStacksRequest rq = new ListStacksRequest();
+                rq.NextToken = nextToken;
+                result = CFclient.ListStacks(rq);
+            }
+
+            return result;
+        }
+
+        DescribeStacksResponse GetStack(string stackName, string nextToken = null)
+        {
+            DescribeStacksResponse result = null;
+
+            using (AmazonCloudFormationClient CFclient = new AmazonCloudFormationClient())
+            {
+                DescribeStacksRequest rq = new DescribeStacksRequest();
+                rq.StackName = stackName;
+                rq.NextToken = nextToken;
+                result = CFclient.DescribeStacks(rq);
+            }
+
+            return result;
+        }
+
+        DescribeSnapshotsResponse GetSnapshots(List<Filter> searchFilters)
+        {
+            DescribeSnapshotsResponse result = null;
+
+            using (AmazonEC2Client EC2client = new AmazonEC2Client(creds))
+            {
+                DescribeSnapshotsRequest rq = new DescribeSnapshotsRequest();
+                rq.Filters = searchFilters;
+                result = EC2client.DescribeSnapshots(rq);
+            }
+
+            return result;
+        }
+
+        DescribeImagesResponse GetAMIs(List<Filter> searchFilters)
+        {
+            DescribeImagesResponse result = null;
+
+            using (AmazonEC2Client EC2client = new AmazonEC2Client(creds))
+            {
+                DescribeImagesRequest rq = new DescribeImagesRequest();
+                rq.Filters = searchFilters;
+                result = EC2client.DescribeImages(rq);
             }
 
             return result;
@@ -421,27 +516,37 @@ namespace EC2Info
 
 
 
-        void DisplayResults(DescribeInstancesResponse describeInstanceResponse)
-        {                 
+        void DisplayResults()
+        {
+
+            if (App.WrapCells == true)
+            {
+                dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            }
+            else
+            {
+                dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            }
             
 
-            if (describeInstanceResponse != null && describeInstanceResponse.Reservations.Count > 0)
+            
+            foreach (Reservation reservation in Reservations)
             {
-                foreach (Reservation reservations in describeInstanceResponse.Reservations)
-                {
-                    foreach (Instance instance in reservations.Instances)
-                    {                                                
-                        DataGridViewRow row = new DataGridViewRow();                        
-                        int rowNumber = dataGridView1.Rows.Add(row);
+                foreach (Instance instance in reservation.Instances)
+                {                                                
+                    DataGridViewRow row = new DataGridViewRow();                        
+                    int rowNumber = dataGridView1.Rows.Add(row);
 
-                        for (int i = 0; i < ColumnItems.Count; i++)
-                        {
-                            dataGridView1.Rows[rowNumber].Cells[ColumnItems[i]].Value = Utils.GetEC2PropFromString(ColumnItems[i], instance);
-                        }
+                    for (int i = 0; i < ColumnItems.Count; i++)
+                    {
+                        dataGridView1.Rows[rowNumber].Cells[ColumnItems[i]].Value = Utils.GetEC2PropFromString(ColumnItems[i], instance);
                     }
                 }
             }
+            
 
+
+            dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
             
         }
 
@@ -515,7 +620,77 @@ namespace EC2Info
 
             
             backgroundWorker1.ReportProgress(1, 1);
-            DescribeInstancesResponse dir = GetInstances(BuildFilter(search_TB.Text, searchItem));            
+            DescribeInstancesResponse dir = new DescribeInstancesResponse();
+            do
+            {
+                dir = GetInstances(BuildFilter(search_TB.Text, searchItem), dir.NextToken);
+                Reservations.AddRange(dir.Reservations);
+            } while (dir.NextToken != null);
+            
+
+            if (ColumnItems.Contains("Snapshots"))
+            {
+                foreach (Reservation reservation in Reservations)
+                {
+                    foreach (Instance instance in reservation.Instances)
+                    {
+                        string a = "";
+                        foreach (InstanceBlockDeviceMapping mapping in instance.BlockDeviceMappings)
+                        {                        
+                            a += mapping.Ebs.VolumeId + ",";
+                        }
+                        a = a.Remove(a.Length - 1, 1);
+                        DescribeSnapshotsResponse dsr = GetSnapshots(BuildFilter(a, "volume-id"));
+                        Snapshots.AddRange(dsr.Snapshots);
+                    }
+                }            
+            }
+
+
+            //if (ColumnItems.Contains("cloudformation:stack-name"))
+            //{            
+            //    ListStacksResponse lsr = new ListStacksResponse();
+            //    do
+            //    {
+            //        lsr = GetStackSummaries(lsr.NextToken);
+            //        StackSummaries.AddRange(lsr.StackSummaries);
+            //    } while (lsr.NextToken != null);
+            //}
+
+
+            if (ColumnItems.Contains(Properties.Settings.Default.StackNameTag) || ColumnItems.Contains("StackName"))
+            {
+                foreach (Reservation reservation in Reservations)
+                {
+                    foreach (Instance instance in reservation.Instances)
+                    {
+                        DescribeStacksResponse dstr = new DescribeStacksResponse();
+                        string stackName = Utils.GetEC2PropFromString("stackname", instance);
+                        if (stackName != "")
+                        {
+                            dstr = GetStack(stackName, null);
+                            Stacks.AddRange(dstr.Stacks);
+                        }
+                    }
+                }
+            }
+        
+
+            //if (ColumnItems.Contains("AMIs"))
+            //{
+            //    foreach (Reservation reservation in dir.Reservations)
+            //    {
+            //        string a = "";
+            //        foreach (Instance instance in reservation.Instances)
+            //        {
+            //            a += instance.InstanceId + ",";
+            //        }
+            //        a = a.Remove(a.Length - 1, 1);
+            //        DescribeImagesResponse dimr = GetAMIs(BuildFilter(a, "name"));
+            //        AMIs.AddRange(dimr.Images);
+            //    }
+            //}
+
             e.Result = dir;
         }
 
@@ -549,7 +724,7 @@ namespace EC2Info
                 {
                     if (e.Result is DescribeInstancesResponse)
                     {
-                        DisplayResults((DescribeInstancesResponse)e.Result);
+                        DisplayResults();
                     }
                 }
             }
@@ -603,6 +778,10 @@ namespace EC2Info
                 }
             }
         }
+
+        
+
+        
 
         
 

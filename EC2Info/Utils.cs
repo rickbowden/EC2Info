@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amazon.EC2.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace EC2Info
                 }
             }
             else
-            {
+            {                
 
                 switch (input.ToLower())
                 {
@@ -31,7 +32,13 @@ namespace EC2Info
                         result = i.Architecture;
                         break;
                     case "blockdevicemappings":
-                        result = "";
+                        result = GetBlockDeviceMappings(i.BlockDeviceMappings, "all");
+                        break;
+                    case "blockdevicenames":
+                        result = GetBlockDeviceMappings(i.BlockDeviceMappings, "name");
+                        break;
+                    case "blockdevicevolumeids":
+                        result = GetBlockDeviceMappings(i.BlockDeviceMappings, "volumeid");
                         break;
                     case "ebsoptimized":
                         result = i.EbsOptimized.ToString();
@@ -64,7 +71,13 @@ namespace EC2Info
                         result = i.Monitoring.State.Value;
                         break;
                     case "networkinterfaces":
-                        result = "";
+                        result = GetNetworkInterfaces(i.NetworkInterfaces, "all");
+                        break;
+                    case "networkinterfaceids":
+                        result = GetNetworkInterfaces(i.NetworkInterfaces, "networkinterfaceIds");
+                        break;
+                    case "networkinterfaceprivateips":
+                        result = GetNetworkInterfaces(i.NetworkInterfaces, "networkinterfaceprivateips");
                         break;
                     case "placement":
                         result = "";
@@ -93,6 +106,22 @@ namespace EC2Info
                     case "securitygroups":
                         result = GetEC2SecurityGroups(i.SecurityGroups);
                         break;
+                    case "snapshots":
+                        result = GetSnapshots(i.BlockDeviceMappings, "all");
+                        break;
+                    case "stackcreationtime":
+                        string stackName = GetEC2Tag(i.Tags, Properties.Settings.Default.StackNameTag);
+                        result = GetStackCreationTime(stackName);
+                        break;
+                    case "stackname":
+                        result = stackName = GetEC2Tag(i.Tags, Properties.Settings.Default.StackNameTag);                        
+                        break;
+                    case "stackid":
+                        result = stackName = GetEC2Tag(i.Tags, Properties.Settings.Default.StackIdTag);
+                        break;
+                    case "stacklogicalid":
+                        result = stackName = GetEC2Tag(i.Tags, Properties.Settings.Default.StackLogicalIdTag);
+                        break;
                     case "subnetid":
                         result = i.SubnetId;
                         break;
@@ -116,6 +145,81 @@ namespace EC2Info
             return result;
         }
 
+        public static string GetSnapshots(List<InstanceBlockDeviceMapping> deviceMappings, string returnType)
+        {
+            string result = "";
+            if (deviceMappings != null)
+            {
+                foreach (InstanceBlockDeviceMapping item in deviceMappings)
+                {
+                    List<Snapshot> snaps = App.Snapshots.FindAll(x => x.VolumeId != null && String.Compare(x.VolumeId, item.Ebs.VolumeId) == 0);
+                    foreach (var snap in snaps)
+                    {
+
+                        switch (returnType.ToLower())
+                        {
+                            case "snapshotid":
+                                result += snap.SnapshotId +  LineEnding();                                
+                                break;
+                            case "volumeid":
+                                result += item.Ebs.VolumeId +  LineEnding();
+                                break;
+                            default:
+                                result += "VolumeId: " + snap.VolumeId + " SnapshotId: " + snap.SnapshotId + LineEnding();
+                                break;
+                        }
+
+                    }
+                }
+                if (result.Length > 0)
+                {
+                    result = result.Remove(result.Length - 2, 2);
+                }
+            }
+            return result;
+        }
+
+        public static string GetStackCreationTime(string stackName)
+        {
+            string result = "";
+
+            var a = App.Stacks.Find(x => x != null && x.StackName == stackName);
+            if (a != null)
+            {
+                result = a.CreationTime.ToString(Properties.Settings.Default.DateTimeFormat);
+            }
+
+            return result;
+        }
+
+        public static string GetBlockDeviceMappings(List<InstanceBlockDeviceMapping> deviceMappings, string returnType)
+        {
+            string result = "";
+            if (deviceMappings != null)
+            {
+                foreach (InstanceBlockDeviceMapping item in deviceMappings)
+                {
+                    switch (returnType.ToLower())
+                    {
+                        case "name":
+                            result += item.DeviceName + LineEnding();                          
+                            break;
+                        case "volumeid":
+                            result += item.Ebs.VolumeId + LineEnding();                            
+                            break;
+                        default:
+                            result += "Name: " + item.DeviceName + " VolumeId: " + item.Ebs.VolumeId + LineEnding();                     
+                            break;
+                    }                    
+                }
+                if (result.Length > 0)
+                {
+                    result = result.Remove(result.Length - 2, 2);
+                }
+            }
+            return result;
+        }
+
         public static string GetEC2Tag(List<Amazon.EC2.Model.Tag> tags, string search)
         {
             string result = "";
@@ -127,6 +231,7 @@ namespace EC2Info
                     result = a.Value;
                 }
             }
+
             return result;
         }
 
@@ -137,17 +242,59 @@ namespace EC2Info
             {
                 foreach (var sg in groups)
                 {
-                    result = result + "," + sg.GroupId;
+                    result += sg.GroupId + LineEnding();
                 }
             }
             if (result.Length > 0)
             {
-                return result.Substring(1, result.Length - 1);
+                result = result.Remove(result.Length - 1);              
             }
-            else
+            
+            return result;
+            
+        }
+
+        public static string GetNetworkInterfaces(List<InstanceNetworkInterface> networkInterfaces, string returnType)
+        {
+            string result = "";
+            if (networkInterfaces != null)
             {
-                return result;
+                foreach (InstanceNetworkInterface item in networkInterfaces)
+                {
+                    switch (returnType.ToLower())
+                    {
+                        case "networkinterfaceids":
+                            result += item.NetworkInterfaceId + LineEnding();
+                            break;
+                        case "networkinterfaceprivateips":
+                            result += item.PrivateIpAddress + LineEnding();
+                            break;
+                        default:
+                            result += "Id: " + item.NetworkInterfaceId + " PrivateIP: " + item.PrivateIpAddress + LineEnding();
+                            break;
+                    }  
+                }
+                if (result.Length > 0)
+                {
+                    result = result.Remove(result.Length - 2, 2);
+                }
             }
+            
+            return result;
+
+        }
+
+
+        static string LineEnding()
+        {
+            string result = ", ";
+
+            if (App.WrapCells)
+            {
+                result = Environment.NewLine;
+            }
+
+            return result;
         }
 
     }

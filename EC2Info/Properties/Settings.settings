@@ -36,7 +36,7 @@
       <Value Profile="(Default)">Name,InstanceId,PrivateIpAddress,PublicIpAddress,VpcId,SubnetId,KeyName,SecurityGroups</Value>
     </Setting>
     <Setting Name="Version" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">0.8</Value>
+      <Value Profile="(Default)">0.9</Value>
     </Setting>
     <Setting Name="VersionsToIgnore" Roaming="true" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
@@ -51,6 +51,9 @@
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;Architecture&lt;/string&gt;
+  &lt;string&gt;BlockDeviceMappings&lt;/string&gt;
+  &lt;string&gt;BlockDeviceNames&lt;/string&gt;
+  &lt;string&gt;BlockDeviceVolumeIds&lt;/string&gt;
   &lt;string&gt;EbsOptimized&lt;/string&gt;
   &lt;string&gt;EnaSupport&lt;/string&gt;
   &lt;string&gt;Hypervisor&lt;/string&gt;
@@ -62,6 +65,9 @@
   &lt;string&gt;LaunchTime&lt;/string&gt;
   &lt;string&gt;Monitoring&lt;/string&gt;
   &lt;string&gt;Name&lt;/string&gt;
+  &lt;string&gt;NetworkInterfaces&lt;/string&gt;
+  &lt;string&gt;NetworkInterfaceIds&lt;/string&gt;
+  &lt;string&gt;NetworkInterfacePrivateIps&lt;/string&gt;
   &lt;string&gt;Platform&lt;/string&gt;
   &lt;string&gt;PrivateDnsName&lt;/string&gt;
   &lt;string&gt;PrivateIpAddress&lt;/string&gt;
@@ -70,8 +76,13 @@
   &lt;string&gt;RootDeviceName&lt;/string&gt;
   &lt;string&gt;RootDeviceType&lt;/string&gt;
   &lt;string&gt;SecurityGroups&lt;/string&gt;
-  &lt;string&gt;SubnetId&lt;/string&gt;
+  &lt;string&gt;Snapshots&lt;/string&gt;
+  &lt;string&gt;StackCreationTime&lt;/string&gt;
+  &lt;string&gt;StackName&lt;/string&gt;
+  &lt;string&gt;StackId&lt;/string&gt;
+  &lt;string&gt;StackLogicalId&lt;/string&gt;
   &lt;string&gt;State&lt;/string&gt;
+  &lt;string&gt;SubnetId&lt;/string&gt;
   &lt;string&gt;ImageId&lt;/string&gt;
   &lt;string&gt;VpcId&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
@@ -81,9 +92,19 @@
     </Setting>
     <Setting Name="Tags" Roaming="true" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;Tag=aws:cloudformation:stack-name&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Value>
+    </Setting>
+    <Setting Name="StackNameTag" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">aws:cloudformation:stack-name</Value>
+    </Setting>
+    <Setting Name="StackIdTag" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">aws:cloudformation:stack-id</Value>
+    </Setting>
+    <Setting Name="StackLogicalIdTag" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">aws:cloudformation:logical-id</Value>
+    </Setting>
+    <Setting Name="DateTimeFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">yyyy-MM-dd HH:mm:ss</Value>
     </Setting>
   </Settings>
 </SettingsFile>

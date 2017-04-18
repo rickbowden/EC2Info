@@ -1,7 +1,17 @@
-﻿v0.8 06/04/2017
+﻿v0.9 18/04/2017
+Pre-release
+
+* Added functionality to get and display network interfaces, block device mappings, snapshots.
+* Added functionality to get and display stack name, stack id, stack logical id, stack creation time.
+* Added function to display multiple items in either a single line or multiple lines.
+
+
+
+v0.8 06/04/2017
 Pre-release
 
 * Added functionality to get and display instance tags and allow the user to save the list of tags between sessions.
+
 
 
 v0.7 16/03/2017

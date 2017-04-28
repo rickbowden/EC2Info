@@ -41,16 +41,16 @@ namespace EC2Info
                         result = GetBlockDeviceMappings(i.BlockDeviceMappings, "volumeid");
                         break;
                     case "ebsoptimized":
-                        result = i.EbsOptimized.ToString();
+                        if (i.EbsOptimized != null) { result = i.EbsOptimized.ToString(); }
                         break;
                     case "enasupport":
-                        result = i.EnaSupport.ToString();
+                        if (i.EnaSupport != null) { result = i.EnaSupport.ToString(); }
                         break;
                     case "hypervisor":
                         result = i.Hypervisor;
                         break;
                     case "iaminstanceprofile":
-                        result = i.IamInstanceProfile.Id;
+                        if (i.IamInstanceProfile != null) { result = i.IamInstanceProfile.Id; }
                         break;                    
                     case "instanceid":
                         result = i.InstanceId;
@@ -68,7 +68,7 @@ namespace EC2Info
                         result = i.LaunchTime.ToString("yyyy-MM-dd HH:mm:ss");
                         break;
                     case "monitoring":
-                        result = i.Monitoring.State.Value;
+                        if (i.Monitoring != null) { result = i.Monitoring.State.Value; }
                         break;
                     case "networkinterfaces":
                         result = GetNetworkInterfaces(i.NetworkInterfaces, "all");
@@ -83,7 +83,7 @@ namespace EC2Info
                         result = "";
                         break;
                     case "platform":
-                        result = i.Platform.Value;
+                        if (i.Platform != null) { result = i.Platform.Value; }
                         break;
                     case "privatednsname":
                         result = i.PrivateDnsName;
@@ -101,7 +101,7 @@ namespace EC2Info
                         result = i.RootDeviceName;
                         break;
                     case "rootdevicetype":
-                        result = i.RootDeviceType.Value;
+                        if (i.RootDeviceType != null) { result = i.RootDeviceType.Value; }
                         break;
                     case "securitygroups":
                         result = GetEC2SecurityGroups(i.SecurityGroups);
@@ -126,7 +126,7 @@ namespace EC2Info
                         result = i.SubnetId;
                         break;
                     case "state":
-                        result = i.State.Name;
+                        if (i.State != null) { result = i.State.Name; }
                         break;
                     case "imageid":
                         result = i.ImageId;
@@ -135,7 +135,7 @@ namespace EC2Info
                         result = i.VpcId;
                         break;
                     case "name":
-                        result = GetEC2Tag(i.Tags, "name");
+                        if (i.Tags != null) { result = GetEC2Tag(i.Tags, "name"); }
                         break;
                     default:
                         break;
